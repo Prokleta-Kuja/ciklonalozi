@@ -1,5 +1,45 @@
 @page "/"
 
-<h1>Hello, world!</h1>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Kontakt</th>
+                <th>Predmet</th>
+                <th>Naručeno</th>
+                <th>Zaprimljeno</th>
+                <th>Isporučeno</th>
+                <th>
+                    <button class="btn btn-sm btn-outline-primary" @onclick=AddClicked>Dodaj</button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Orders)
+            {
+                var rowClass = string.Empty;
+                if (order.Arrival.Date > Today && !order.Arrived.HasValue)
+                    rowClass = "table-danger"; 
+                else if (order.Arrival.Date == Today && !order.Arrived.HasValue)
+                    rowClass = "table-warning";
+                else if (order.Arrived.HasValue && order.Arrived.Value.Date < Yesterday && !order.Completed.HasValue)
+                    rowClass = "table-danger";
+                else if (order.Completed.HasValue)
+                    rowClass = "table-success";
 
-Welcome to your new app.
+                <tr @key=order.OrderId class=@rowClass>
+                    <td class="user-select-all">@order.OrderId</td>
+                    <td class="user-select-all">@order.ContactName</td>
+                    <td class="user-select-all">@order.Subject</td>
+                    <td class="user-select-all">@order.Arrival</td>
+                    <td class="user-select-all">@order.Arrived</td>
+                    <td class="user-select-all">@order.Completed</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" href="@C.Routes.InvoiceFor(order.OrderId)">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
