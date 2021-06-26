@@ -1,0 +1,99 @@
+@using System.Globalization;
+
+<div class="mb-3">
+    <label for="@For" class="form-label">@Label @(Required ? "*":"")</label>
+    <div class="input-group @_errorClass">
+        <button class="btn btn-outline-primary" title="Prethodni dan" type=button @onclick=PrevDay>&lt;</button>
+        <button class="btn btn-outline-primary" title="Idući dan" type=button @onclick=NextDay>&gt;</button>
+        <input type="datetime" class="form-control @_errorClass" id="@For" placeholder=@PlaceHolder
+            @bind=_local @onblur=Update @bind:culture=_ci required=@Required @ref=Input>
+        <button class="btn btn-outline-secondary" title="Sad" type="button" @onclick=Today>📆</button>
+        @if(_local.HasValue)
+        {
+            <button class="btn btn-outline-danger" title="Očisti" type="button" @onclick=Clear>⨉</button>
+        }
+    </div>
+    @if (_isError)
+    {
+        <div class="invalid-feedback">
+            @Errors![For]
+        </div>
+    }
+    else if (_local.HasValue)
+    {
+        <div class="form-text">@_ci.DateTimeFormat.GetDayName(_local.Value.DayOfWeek)</div>
+    }
+</div>
+
+@code{
+    const string DEFAULT_LOCALE = "hr-HR";
+    const string DEFAULT_TZ = "Europe/Zagreb";
+    private bool _isError => Errors != null && Errors.ContainsKey(For);
+    private string _errorClass => _isError ? "is-invalid" : string.Empty;
+    private ElementReference Input;
+    CultureInfo _ci = null!;
+    TimeZoneInfo _tz = null!;
+    DateTime? _local;
+    [Parameter] public string For { get; set; } = null!;
+    [Parameter] public string Label { get; set; } = null!;
+    [Parameter] public DateTime? Value { get; set; }
+    [Parameter] public EventCallback<DateTime?> ValueChanged { get; set; }
+    [Parameter] public bool Required { get; set; }
+    [Parameter] public string? PlaceHolder { get; set; }
+    [Parameter] public string? Locale { get; set; }
+    [Parameter] public string? TimeZone { get; set; }
+    [Parameter] public Dictionary<string, string>? Errors { get; set; }
+    [Parameter] public bool AutoFocus { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender && AutoFocus)
+            await Input.FocusAsync();
+    }
+    protected override void OnInitialized()
+    {
+        try { _ci = CultureInfo.GetCultureInfo(Locale ?? DEFAULT_LOCALE); }
+        catch (Exception) { _ci = CultureInfo.GetCultureInfo(DEFAULT_LOCALE); }
+        try { _tz = TimeZoneInfo.FindSystemTimeZoneById(TimeZone ?? DEFAULT_TZ); }
+        catch (Exception) { _tz = TimeZoneInfo.FindSystemTimeZoneById(DEFAULT_TZ); }
+
+        if (Value.HasValue)
+            _local = TimeZoneInfo.ConvertTimeFromUtc(Value.Value,_tz);
+    }
+    
+    private async Task Update()
+    {
+        if (_isError)
+            Errors!.Remove(For);
+
+        if (!ValueChanged.HasDelegate)
+            return;
+
+        if (!_local.HasValue)
+            await ValueChanged.InvokeAsync(null);
+        else
+        {
+            var dt = TimeZoneInfo.ConvertTimeToUtc(_local.Value,_tz);
+            await ValueChanged.InvokeAsync(dt);
+        }
+    }
+    private async Task Clear()
+    {
+        _local = null;
+        await Update();
+    } 
+    private async Task Today() 
+    {
+        _local = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _tz);
+        await Update();
+    }
+    private async Task Move(int days)
+    {
+        if(!_local.HasValue)
+            _local = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _tz);
+
+        _local = _local.Value.AddDays(days);
+        await Update();
+    }
+    private Task PrevDay() => Move(-1);
+    private Task NextDay() => Move(1);
+}

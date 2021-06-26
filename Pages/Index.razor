@@ -1,4 +1,7 @@
-@page "/"
+@attribute [Microsoft.AspNetCore.Components.RouteAttribute(C.Routes.Root)]
+@using ciklonalozi.Modals
+
+<CreateOrder @ref=CreateOrderModal />
 
 <div class="table-responsive">
     <table class="table table-hover">
@@ -29,14 +32,14 @@
                     rowClass = "table-success";
 
                 <tr @key=order.OrderId class=@rowClass>
-                    <td class="user-select-all">@order.OrderId</td>
-                    <td class="user-select-all">@order.ContactName</td>
-                    <td class="user-select-all">@order.Subject</td>
-                    <td class="user-select-all">@order.Arrival</td>
-                    <td class="user-select-all">@order.Arrived</td>
-                    <td class="user-select-all">@order.Completed</td>
+                    <td>@order.OrderId</td>
+                    <td>@order.ContactName</td>
+                    <td>@order.Subject</td>
+                    <td>@Display(order.Arrival)</td>
+                    <td>@Display(order.Arrived)</td>
+                    <td>@Display(order.Completed)</td>
                     <td>
-                        <a class="btn btn-sm btn-outline-secondary" href="@C.Routes.InvoiceFor(order.OrderId)">Edit</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="@C.Routes.InvoiceFor(order.OrderId)">Izmjena</a>
                     </td>
                 </tr>
             }
