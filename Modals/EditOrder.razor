@@ -1,0 +1,31 @@
+@using ciklonalozi.Models
+
+@if (Shown)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" style="display: block;" @onclick=Hide>
+        <div class="modal-dialog" @onclick:stopPropagation>
+            <form @onsubmit=SaveClicked>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Novi nalog</h5>
+                        <button type="button" class="btn-close" @onclick=Hide></button>
+                    </div>
+                    <div class="modal-body">
+                        <TextBox For=@nameof(EditOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName AutoFocus Errors=Errors Required />
+                        <TextBox For=@nameof(EditOrderModel.ContactPhone) Label=Telefon @bind-Value=Model.ContactPhone Errors=Errors />
+                        <TextBox For=@nameof(EditOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors Required />
+                        <TextBox For=@nameof(EditOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3 Errors=Errors />
+                        <DateTimeBox For=@nameof(EditOrderModel.Arrival) Label=Dolazak @bind-Value=Model.Arrival Errors=Errors Required />
+                        <DateTimeBox For=@nameof(EditOrderModel.Arrived) Label=Zaprimljeno @bind-Value=Model.Arrived Errors=Errors />
+                        <DateTimeBox For=@nameof(EditOrderModel.Completed) Label=Isporučeno @bind-Value=Model.Completed Errors=Errors />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-outline-danger" @onclick=Hide>Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}

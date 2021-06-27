@@ -12,14 +12,11 @@
                         <button type="button" class="btn-close" @onclick=Hide></button>
                     </div>
                     <div class="modal-body">
-                        <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName AutoFocus Errors=Errors
-                            Required />
+                        <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName AutoFocus Errors=Errors Required />
                         <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=Model.ContactPhone Errors=Errors />
-                        <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
-                            Required />
-                        <TextBox For=@nameof(CreateOrderModel.Note) Label=Napomena @bind-Value=Model.Note Lines=3 Errors=Errors />
-                        <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label=Datum @bind-Value=Model.ArrivalOrArrived Errors=Errors
-                            Required />
+                        <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors Required />
+                        <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3 Errors=Errors />
+                        <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label=Datum @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
                         <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival Errors=Errors />
                     </div>
                     <div class="modal-footer">

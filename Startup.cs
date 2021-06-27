@@ -24,7 +24,7 @@ namespace ciklonalozi
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddDbContext<AppDbContext>(builder =>
+            services.AddDbContextFactory<AppDbContext>(builder =>
             {
                 builder.UseSqlite(C.Settings.AppDbConnectionString);
                 builder.EnableSensitiveDataLogging(Debugger.IsAttached);

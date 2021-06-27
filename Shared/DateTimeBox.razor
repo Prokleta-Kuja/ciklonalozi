@@ -1,7 +1,13 @@
 @using System.Globalization;
 
-<div class="mb-3">
-    <label for="@For" class="form-label">@Label @(Required ? "*":"")</label>
+<div class="mb-3" @onclick:stopPropagation>
+    <label for="@For" class="form-label">
+        @Label @(Required ? "*":"") 
+        @if(_local.HasValue)
+        {
+            <span class="form-text"> (@_ci.DateTimeFormat.GetDayName(_local.Value.DayOfWeek))</span>
+        }
+    </label>
     <div class="input-group @_errorClass">
         <button class="btn btn-outline-primary" title="Prethodni dan" type=button @onclick=PrevDay>&lt;</button>
         <button class="btn btn-outline-primary" title="Idući dan" type=button @onclick=NextDay>&gt;</button>
@@ -18,10 +24,6 @@
         <div class="invalid-feedback">
             @Errors![For]
         </div>
-    }
-    else if (_local.HasValue)
-    {
-        <div class="form-text">@_ci.DateTimeFormat.GetDayName(_local.Value.DayOfWeek)</div>
     }
 </div>
 

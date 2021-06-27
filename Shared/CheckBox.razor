@@ -1,7 +1,7 @@
 
-  <div class="mb-3 form-check">
+  <div class="mb-3 form-check" @onclick:stopPropagation>
     <input type="checkbox" class="form-check-input @_errorClass" id=@For @bind=@Value
-        @onblur=Update required=@Required>
+        @onclick=Update required=@Required>
     <label class="form-check-label" for=@For>@Label @(Required ? "*":"")</label>
     @if (_isError)
     {
@@ -28,6 +28,6 @@
         if (!ValueChanged.HasDelegate)
             return;
 
-        await ValueChanged.InvokeAsync(Value);
+        await ValueChanged.InvokeAsync(!Value);
     }
   }

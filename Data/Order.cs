@@ -17,11 +17,9 @@ namespace ciklonalozi.Data
         public string ContactName { get; set; }
         public string? ContactPhone { get; set; }
         public string Subject { get; set; }
-        public string? Note { get; set; }
+        public string? Description { get; set; }
         public DateTime Arrival { get; set; }
         public DateTime? Arrived { get; set; }
         public DateTime? Completed { get; set; }
-
-        public ICollection<OrderItem>? Items { get; set; }
     }
 }

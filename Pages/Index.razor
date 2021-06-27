@@ -1,7 +1,19 @@
 @attribute [Microsoft.AspNetCore.Components.RouteAttribute(C.Routes.Root)]
 @using ciklonalozi.Modals
 
-<CreateOrder @ref=CreateOrderModal />
+<CreateOrder @ref=CreateOrderModal OnSaved=Refresh />
+<EditOrder @ref=EditOrderModal OnSaved=Refresh />
+
+<form class="d-flex justify-content-evenly" @onsubmit=Refresh @onsubmit:preventDefault>
+    <div class="mb-3">
+        <label for=query class="form-label">Traži</label>
+        <input @ref=QueryElement class="form-control" id=query @bind=Query>
+    </div>
+    <DateTimeBox For=@nameof(From) Label=Od @bind-Value=From />
+    <DateTimeBox For=@nameof(To) Label=Do @bind-Value=To />
+</form>
+
+<hr>
 
 <div class="table-responsive">
     <table class="table table-hover">
@@ -10,7 +22,7 @@
                 <th>#</th>
                 <th>Kontakt</th>
                 <th>Predmet</th>
-                <th>Naručeno</th>
+                <th>Opis</th>
                 <th>Zaprimljeno</th>
                 <th>Isporučeno</th>
                 <th>
@@ -19,29 +31,35 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var order in Orders)
+            @foreach (var date in Orders)
             {
-                var rowClass = string.Empty;
-                if (order.Arrival.Date > Today && !order.Arrived.HasValue)
-                    rowClass = "table-danger"; 
-                else if (order.Arrival.Date == Today && !order.Arrived.HasValue)
-                    rowClass = "table-warning";
-                else if (order.Arrived.HasValue && order.Arrived.Value.Date < Yesterday && !order.Completed.HasValue)
-                    rowClass = "table-danger";
-                else if (order.Completed.HasValue)
-                    rowClass = "table-success";
+                <tr class="table-secondary"><td colspan=7><h5 class="mb-0"><i>@Display(date.Key, false)</i> @CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek)</h5></td></tr>
+                @foreach (var order in date.Value)
+                {   
+                    var rowClass = string.Empty;
+                    if (order.Arrival.Date < Today && !order.Arrived.HasValue)
+                        rowClass = "table-danger"; 
+                    else if (order.Arrival.Date == Today && !order.Arrived.HasValue)
+                        rowClass = "table-info";
+                    else if (order.Arrived.HasValue && order.Arrived.Value.Date < Yesterday && !order.Completed.HasValue)
+                        rowClass = "table-danger";
+                    else if (order.Arrived.HasValue && !order.Completed.HasValue)
+                        rowClass = "table-warning";
+                    else if (order.Completed.HasValue)
+                        rowClass = "table-success";
 
-                <tr @key=order.OrderId class=@rowClass>
-                    <td>@order.OrderId</td>
-                    <td>@order.ContactName</td>
-                    <td>@order.Subject</td>
-                    <td>@Display(order.Arrival)</td>
-                    <td>@Display(order.Arrived)</td>
-                    <td>@Display(order.Completed)</td>
-                    <td>
-                        <a class="btn btn-sm btn-outline-secondary" href="@C.Routes.InvoiceFor(order.OrderId)">Izmjena</a>
-                    </td>
-                </tr>
+                    <tr @key=order.OrderId class=@rowClass>
+                        <td>@order.OrderId</td>
+                        <td>@order.ContactName</td>
+                        <td>@order.Subject</td>
+                        <td>@order.Description</td>
+                        <td>@Display(order.Arrived)</td>
+                        <td>@Display(order.Completed)</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-secondary" @onclick=@(()=>EditClicked(order))>Izmijeni</button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

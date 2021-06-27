@@ -9,7 +9,7 @@ namespace ciklonalozi.Models
         public string? ContactName { get; set; }
         public string? ContactPhone { get; set; }
         public string? Subject { get; set; }
-        public string? Note { get; set; }
+        public string? Description { get; set; }
         public DateTime? ArrivalOrArrived { get; set; }
         public bool IsArrival { get; set; }
 

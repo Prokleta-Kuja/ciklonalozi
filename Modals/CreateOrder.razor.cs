@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using ciklonalozi.Data;
 using ciklonalozi.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 
 namespace ciklonalozi.Modals
 {
     public partial class CreateOrder
     {
         [Parameter] public EventCallback OnSaved { get; set; }
-        [Inject] public AppDbContext Db { get; set; } = null!;
+        [Inject] public IDbContextFactory<AppDbContext> DbFactory { get; set; } = null!;
         bool Shown;
         CreateOrderModel Model = new();
         private Dictionary<string, string>? Errors;
@@ -36,8 +37,11 @@ namespace ciklonalozi.Modals
             if (!Model.IsArrival)
                 order.Arrived = Model.ArrivalOrArrived.Value;
 
-            Db.Orders.Add(order);
-            await Db.SaveChangesAsync();
+            order.Description = Model.Description;
+
+            using var db = DbFactory.CreateDbContext();
+            db.Orders.Add(order);
+            await db.SaveChangesAsync();
 
             if (OnSaved.HasDelegate)
                 await OnSaved.InvokeAsync();

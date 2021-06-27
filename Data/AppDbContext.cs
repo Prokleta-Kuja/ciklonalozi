@@ -6,7 +6,6 @@ namespace ciklonalozi.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Order> Orders { get; set; } = null!;
-        public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -15,12 +14,6 @@ namespace ciklonalozi.Data
             builder.Entity<Order>(e =>
             {
                 e.HasKey(p => p.OrderId);
-                e.HasMany(p => p.Items).WithOne(p => p.Order!).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            builder.Entity<OrderItem>(e =>
-            {
-                e.HasKey(p => p.OrderItemId);
             });
         }
     }
