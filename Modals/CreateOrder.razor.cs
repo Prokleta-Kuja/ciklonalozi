@@ -17,7 +17,7 @@ namespace ciklonalozi.Modals
         private Dictionary<string, string>? Errors;
         public void Show()
         {
-            Model.ArrivalOrArrived = DateTime.UtcNow;
+            Model.ArrivalOrArrived = DateTime.UtcNow.Date.AddHours(8);
             Shown = true;
             StateHasChanged();
         }
