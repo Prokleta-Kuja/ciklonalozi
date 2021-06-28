@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using AspNet.Security.OAuth.GitHub;
 using ciklonalozi.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,7 @@ namespace ciklonalozi
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.ConfigureAuth(Configuration);
             services.AddDbContextFactory<AppDbContext>(builder =>
             {
                 builder.UseSqlite(C.Settings.AppDbConnectionString);
@@ -47,9 +50,12 @@ namespace ciklonalozi
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapBlazorHub();
+                endpoints.MapRazorPages();
+                endpoints.MapBlazorHub().RequireAuthorization(new AuthorizeAttribute { AuthenticationSchemes = GitHubAuthenticationDefaults.AuthenticationScheme });
                 endpoints.MapFallbackToPage("/_Host");
             });
         }

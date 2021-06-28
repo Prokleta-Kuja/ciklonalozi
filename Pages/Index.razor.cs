@@ -19,12 +19,12 @@ namespace ciklonalozi.Pages
         DateTime Today { get; } = DateTime.UtcNow.Date;
         DateTime Yesterday { get; } = DateTime.UtcNow.AddDays(-1).Date;
         Dictionary<DateTime, List<Order>> Orders { get; set; } = new();
-        string? Query;
-        ElementReference QueryElement;
-        DateTime? From = DateTime.UtcNow.Date.AddDays(-1);
-        DateTime? To = DateTime.UtcNow.Date.AddDays(5);
-        CreateOrder? CreateOrderModal;
-        EditOrder? EditOrderModal;
+        protected string? Query;
+        protected ElementReference QueryElement;
+        protected DateTime? From = DateTime.UtcNow.Date.AddDays(-1);
+        protected DateTime? To = DateTime.UtcNow.Date.AddDays(5);
+        protected CreateOrder? CreateOrderModal;
+        protected EditOrder? EditOrderModal;
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)

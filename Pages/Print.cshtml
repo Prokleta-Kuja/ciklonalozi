@@ -1,0 +1,22 @@
+@page "{id:int}"
+@using ciklonalozi.Pages
+@model Print
+
+  <!DOCTYPE html>
+<html>
+<head>
+    <title>Ciklo-Sport Nalog</title>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" /> *@
+</head>
+<body>
+    @if(Model.Order == null)
+    {
+        <h4>Nema</h4>
+    }
+    else
+    {
+        <h1>@Model.Order.Subject</h1>
+    }
+</body>
+</html>
+
