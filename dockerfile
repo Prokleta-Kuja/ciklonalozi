@@ -12,6 +12,13 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/out ./
 
-ENV ASPNETCORE_URLS=http://*:50505
+ENV ASPNETCORE_URLS=http://*:50505 \
+    TZ="Europe/Zagreb" \
+    Auth__GitHubId="INVALID" \
+    Auth__GitHubSecret="INVALID" \
+    Auth__GitHubUsers__0="INVALID1" \
+    Auth__GitHubUsers__1="INVALID2"
+
+EXPOSE 50505
 
 ENTRYPOINT ["dotnet", "ciklonalozi.dll"]
