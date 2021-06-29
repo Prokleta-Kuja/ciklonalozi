@@ -9,8 +9,9 @@
         <label for=query class="form-label">Traži</label>
         <input @ref=QueryElement class="form-control" id=query @bind=Query>
     </div>
-    <DateTimeBox For=@nameof(From) Label=Od @bind-Value=From />
-    <DateTimeBox For=@nameof(To) Label=Do @bind-Value=To />
+    <DateTimeBox For=@nameof(From) Label=Od @bind-Value=From AfterChange=Refresh />
+    <DateTimeBox For=@nameof(To) Label=Do @bind-Value=To AfterChange=Refresh />
+    <button type="submit" class="d-none"></button>
 </form>
 
 <hr>

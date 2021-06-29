@@ -12,8 +12,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/out ./
 
-ENV ASPNETCORE_URLS=http://*:50505 \
-    TZ="Europe/Zagreb" \
+ENV TZ="Europe/Zagreb" \
+    ASPNETCORE_URLS=http://*:50505 \
+    ASPNETCORE_FORWARDEDHEADERS_ENABLED=true \
     Auth__GitHubId="INVALID" \
     Auth__GitHubSecret="INVALID" \
     Auth__GitHubUsers__0="INVALID1" \

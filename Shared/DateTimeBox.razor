@@ -40,6 +40,7 @@
     [Parameter] public string Label { get; set; } = null!;
     [Parameter] public DateTime? Value { get; set; }
     [Parameter] public EventCallback<DateTime?> ValueChanged { get; set; }
+    [Parameter] public EventCallback AfterChange { get; set; }
     [Parameter] public bool Required { get; set; }
     [Parameter] public string? PlaceHolder { get; set; }
     [Parameter] public string? Locale { get; set; }
@@ -77,6 +78,9 @@
             var dt = TimeZoneInfo.ConvertTimeToUtc(_local.Value,_tz);
             await ValueChanged.InvokeAsync(dt);
         }
+
+        if(AfterChange.HasDelegate)
+            await AfterChange.InvokeAsync();
     }
     private async Task Clear()
     {
