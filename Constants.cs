@@ -16,7 +16,7 @@ namespace ciklonalozi
         }
         public static class Settings
         {
-            public static string DataPath => Path.Combine(Environment.CurrentDirectory, "app.db");
+            public static string DataPath => Path.Combine(Environment.CurrentDirectory, "data", "app.db");
             public static readonly string AppDbConnectionString = $"Data Source={DataPath};Cache=Shared";
         }
     }
