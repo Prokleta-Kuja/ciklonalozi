@@ -23,6 +23,10 @@ namespace ciklonalozi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.ConfigureAuth(Configuration);
@@ -43,6 +47,7 @@ namespace ciklonalozi
             else
             {
                 app.UseExceptionHandler("/Error");
+                app.UseForwardedHeaders();
             }
 
             app.UseStaticFiles();
