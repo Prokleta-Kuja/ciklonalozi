@@ -2,11 +2,23 @@
 @using ciklonalozi.Pages
 @model Print
 
-  <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="hr">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ciklo-Sport Nalog</title>
-    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" /> *@
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
+    <link href="/css/site.css" rel="stylesheet" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    
 </head>
 <body>
     @if(Model.Order == null)
@@ -15,8 +27,18 @@
     }
     else
     {
+        <div class="d-grid d-print-none m-3">
+            <button class="btn btn-success btn-block" type="button" onclick="window.print()">Print</button>
+        </div>
         <h1>@Model.Order.Subject</h1>
+        <p>@Model.Order.Description</p>
+        <p>Dolazak: @Model.Order.Arrived?.ToString("dd. MM. yyyy.")</p>
     }
+    
+    <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        window.print();
+    </script>
 </body>
 </html>
 

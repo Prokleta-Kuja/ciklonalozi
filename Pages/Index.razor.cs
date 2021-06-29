@@ -28,9 +28,11 @@ namespace ciklonalozi.Pages
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
+            {
                 await QueryElement.FocusAsync();
 
-            await Refresh();
+                await Refresh();
+            }
         }
         async Task Refresh()
         {
