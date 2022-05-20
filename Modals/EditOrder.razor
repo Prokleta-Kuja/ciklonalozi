@@ -4,32 +4,49 @@
 {
     <div class="modal-backdrop fade show"></div>
     <div class="modal fade show" style="display: block;" @onclick=Hide>
-        <div class="modal-dialog" @onclick:stopPropagation>
+        <div class="modal-dialog modal-lg" @onclick:stopPropagation>
             <form @onsubmit=SaveClicked>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Novi nalog</h5>
+                        <h5 class="modal-title">Nalog @OriginalOrder?.OrderId.ToString("#,0")</h5>
                         <button type="button" class="btn-close" @onclick=Hide></button>
                     </div>
                     <div class="modal-body">
-                        <TextBox For=@nameof(EditOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
-                        AutoFocus Errors=Errors Required />
-                        <TextBox For=@nameof(EditOrderModel.ContactPhone) Label=Telefon @bind-Value=Model.ContactPhone
-                        Errors=Errors />
-                        <TextBox For=@nameof(EditOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
-                        Required />
-                        <TextBox For=@nameof(EditOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
-                        Errors=Errors />
-                        <DateTimeBox For=@nameof(EditOrderModel.Arrival) Label=Dolazak @bind-Value=Model.Arrival
-                        Errors=Errors Required />
-                        <DateTimeBox For=@nameof(EditOrderModel.Arrived) Label=Zaprimljeno @bind-Value=Model.Arrived
-                        Errors=Errors />
-                        <DateTimeBox For=@nameof(EditOrderModel.Completed) Label=Isporučeno @bind-Value=Model.Completed
-                        Errors=Errors />
+                        <div class="row">
+                            <div class="col">
+                                <TextBox For=@nameof(EditOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
+                                Errors=Errors Required />
+                                <TextBox For=@nameof(EditOrderModel.ContactPhone) Label=Telefon @bind-Value=Model.ContactPhone
+                                Errors=Errors />
+                                <TextBox For=@nameof(EditOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
+                                Required />
+                                <TextBox For=@nameof(EditOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
+                                Errors=Errors />
+                                <CheckBox For=@nameof(EditOrderModel.Removed) Label=Brisano @bind-Value=Model.Removed
+                                Errors=Errors />
+                            </div>
+                            <div class="col">
+                                <DateTimeBox For=@nameof(EditOrderModel.Arrival) Label=Dolazak @bind-Value=Model.Arrival
+                                Errors=Errors Required />
+                                <DateTimeBox For=@nameof(EditOrderModel.Arrived) Label=Zaprimljeno @bind-Value=Model.Arrived
+                                Errors=Errors />
+                                <DateTimeBox For=@nameof(EditOrderModel.Completed) Label=Završeno @bind-Value=Model.Completed
+                                Errors=Errors />
+                                <div class="d-flex">
+                                    <NumBox For=@nameof(EditOrderModel.EstimatedPrice) Label=Procjena
+                                    @bind-Value=Model.EstimatedPrice />
+                                    <div class="m-2"></div>
+                                    <NumBox For=@nameof(EditOrderModel.RealPrice) Label=Krajnja @bind-Value=Model.RealPrice
+                                    Required=Model.Completed.HasValue AutoFocus />
+                                </div>
+                                <DateTimeBox For=@nameof(EditOrderModel.Returned) Label=Vraćeno @bind-Value=Model.Returned
+                                Errors=Errors />
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Spremi</button>
                         <button type="reset" class="btn btn-outline-danger" @onclick=Hide>Odustani</button>
+                        <button type="submit" class="btn btn-primary">Spremi</button>
                     </div>
                 </div>
             </form>

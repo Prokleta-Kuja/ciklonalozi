@@ -81,14 +81,16 @@ namespace ciklonalozi.Pages
 
             StateHasChanged();
         }
-        void AddClicked()
+        async Task Return(Order order)
         {
-            CreateOrderModal?.Show();
+            using var db = DbFactory.CreateDbContext();
+            db.Attach(order);
+
+            order.Returned = DateTime.UtcNow;
+            await db.SaveChangesAsync();
         }
-        void EditClicked(Order order)
-        {
-            EditOrderModal?.Show(order);
-        }
+        void AddClicked() => CreateOrderModal?.Show();
+        void EditClicked(Order order) => EditOrderModal?.Show(order);
         string Display(DateTime? dt, bool showTime = true, string empty = "-")
         {
             if (!dt.HasValue)
@@ -101,6 +103,34 @@ namespace ciklonalozi.Pages
                 format += $" {CI.DateTimeFormat.ShortTimePattern}";
 
             return printDt.ToString(format);
+        }
+        string GetStatusRowClass(Order order)
+        {
+            if (order.Removed)
+                return "text-decoration-line-through";
+            if (order.Arrival.Date < Today && !order.Arrived.HasValue)
+                return "table-danger";
+            if (order.Arrival.Date == Today && !order.Arrived.HasValue)
+                return "table-info";
+            if (order.Arrived.HasValue && order.Arrived.Value.Date < Yesterday && !order.Completed.HasValue)
+                return "table-danger";
+            if (order.Arrived.HasValue && !order.Completed.HasValue)
+                return "table-warning";
+            if (order.Completed.HasValue)
+                return "table-success";
+
+            return string.Empty;
+        }
+        static string GetStatusIconClass(Order order)
+        {
+            if (order.Removed)
+                return "bi bi-eraser-fill";
+            if (!order.Arrived.HasValue)
+                return "bi bi-clock";
+            if (order.Returned.HasValue)
+                return "bi bi-check-all";
+
+            return "bi bi-tools";
         }
     }
 }

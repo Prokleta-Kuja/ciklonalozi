@@ -29,6 +29,10 @@ namespace ciklonalozi.Modals
             Model.Arrival = order.Arrival;
             Model.Arrived = order.Arrived;
             Model.Completed = order.Completed;
+            Model.Returned = order.Returned;
+            Model.EstimatedPrice = order.EstimatedPrice;
+            Model.RealPrice = order.RealPrice;
+            Model.Removed = order.Removed;
 
             Shown = true;
             StateHasChanged();
@@ -44,7 +48,6 @@ namespace ciklonalozi.Modals
             Errors = Model.Validate();
             if (Errors != null || OriginalOrder == null)
                 return;
-
 
             using var db = DbFactory.CreateDbContext();
             db.Attach(OriginalOrder);
@@ -64,6 +67,10 @@ namespace ciklonalozi.Modals
             OriginalOrder.Arrival = Model.Arrival!.Value;
             OriginalOrder.Arrived = Model.Arrived;
             OriginalOrder.Completed = Model.Completed;
+            OriginalOrder.Returned = Model.Returned;
+            OriginalOrder.EstimatedPrice = Model.EstimatedPrice;
+            OriginalOrder.RealPrice = Model.RealPrice;
+            OriginalOrder.Removed = Model.Removed;
 
             await db.SaveChangesAsync();
 

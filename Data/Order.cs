@@ -27,5 +27,9 @@ namespace ciklonalozi.Data
         public DateTime Arrival { get; set; }
         public DateTime? Arrived { get; set; }
         public DateTime? Completed { get; set; }
+        public DateTime? Returned { get; set; }
+        public decimal? EstimatedPrice { get; set; }
+        public decimal? RealPrice { get; set; }
+        public bool Removed { get; set; }
     }
 }
