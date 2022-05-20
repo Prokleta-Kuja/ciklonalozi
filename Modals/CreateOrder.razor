@@ -12,16 +12,22 @@
                         <button type="button" class="btn-close" @onclick=Hide></button>
                     </div>
                     <div class="modal-body">
-                        <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName AutoFocus Errors=Errors Required />
-                        <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=Model.ContactPhone Errors=Errors />
-                        <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors Required />
-                        <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3 Errors=Errors />
-                        <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label=Datum @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
-                        <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival Errors=Errors />
+                        <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=PhoneNumber
+                        Errors=Errors AutoFocus />
+                        <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
+                        Errors=Errors Required />
+                        <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
+                        Required />
+                        <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
+                        Errors=Errors />
+                        <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label=Datum
+                        @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
+                        <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival
+                        Errors=Errors />
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-outline-danger" @onclick=Hide>Cancel</button>
+                        <button type="submit" class="btn btn-primary">Dodaj</button>
+                        <button type="reset" class="btn btn-outline-danger" @onclick=Hide>Odustani</button>
                     </div>
                 </div>
             </form>

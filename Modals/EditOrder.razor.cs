@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using ciklonalozi.Data;
 using ciklonalozi.Models;
@@ -47,8 +49,16 @@ namespace ciklonalozi.Modals
             using var db = DbFactory.CreateDbContext();
             db.Attach(OriginalOrder);
 
-            OriginalOrder.ContactName = Model.ContactName!;
-            OriginalOrder.ContactPhone = Model.ContactPhone;
+            OriginalOrder.ContactName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.ContactName!);
+            if (!string.IsNullOrWhiteSpace(Model.ContactPhone))
+            {
+                OriginalOrder.ContactPhone = Model.ContactPhone;
+                OriginalOrder.ContactPhoneNormalized = string.Concat(Model.ContactPhone.Where(char.IsDigit));
+            }
+            else
+            {
+                OriginalOrder.ContactPhone = OriginalOrder.ContactPhoneNormalized = null;
+            }
             OriginalOrder.Subject = Model.Subject!;
             OriginalOrder.Description = Model.Description;
             OriginalOrder.Arrival = Model.Arrival!.Value;

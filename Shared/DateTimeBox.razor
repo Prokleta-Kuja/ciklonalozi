@@ -13,7 +13,7 @@
         <button class="btn btn-outline-primary" title="Idući dan" type=button @onclick=NextDay>&gt;</button>
         <input type="datetime" class="form-control @_errorClass" id="@For" placeholder=@PlaceHolder
             @bind=_local @onblur=Update @bind:culture=_ci required=@Required @ref=Input>
-        <button class="btn btn-outline-secondary" title="Sad" type="button" @onclick=Today>📆</button>
+        <button class="btn btn-outline-secondary" title="Sad" type="button" @onclick=Today><i class="bi bi-calendar-check"></i></button>
         @if(_local.HasValue)
         {
             <button class="btn btn-outline-danger" title="Očisti" type="button" @onclick=Clear>⨉</button>

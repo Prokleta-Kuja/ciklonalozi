@@ -56,8 +56,8 @@ namespace ciklonalozi.Pages
 
                 query = query.Where(o =>
                     EF.Functions.Like(o.ContactName, likeStr) ||
-                    EF.Functions.Like(o.ContactPhone, likeStr) ||
-                    EF.Functions.Like(o.Description, likeStr));
+                    EF.Functions.Like(o.ContactPhone!, likeStr) ||
+                    EF.Functions.Like(o.Description!, likeStr));
             }
 
             if (From.HasValue)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ciklonalozi.Data;
 using ciklonalozi.Models;
@@ -14,6 +15,7 @@ namespace ciklonalozi.Modals
         [Inject] public IDbContextFactory<AppDbContext> DbFactory { get; set; } = null!;
         bool Shown;
         CreateOrderModel Model = new();
+        private string? PhoneNumber { get => Model.ContactPhone; set { _ = CheckPhoneNumber(value); } }
         private Dictionary<string, string>? Errors;
         public void Show()
         {
@@ -26,6 +28,27 @@ namespace ciklonalozi.Modals
             Model = new();
             Shown = false;
             StateHasChanged();
+        }
+        async Task CheckPhoneNumber(string? phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                Model.ContactPhone = null;
+                return;
+            }
+
+            Model.ContactPhone = phoneNumber;
+            var normalized = string.Concat(phoneNumber.Where(char.IsDigit));
+
+            using var db = DbFactory.CreateDbContext();
+            var name = await db.Orders
+                .Where(o => o.ContactPhoneNormalized == normalized)
+                .OrderByDescending(o => o.Arrival)
+                .Select(o => o.ContactName)
+                .FirstOrDefaultAsync();
+
+            if (!string.IsNullOrWhiteSpace(name))
+                Model.ContactName = name;
         }
         async Task SaveClicked()
         {

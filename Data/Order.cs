@@ -1,5 +1,6 @@
 using System;
-using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace ciklonalozi.Data
 {
@@ -7,8 +8,12 @@ namespace ciklonalozi.Data
     {
         public Order(string contactName, string? contactPhone, string subject, DateTime arrival)
         {
-            ContactName = contactName;
-            ContactPhone = contactPhone;
+            ContactName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(contactName);
+            if (!string.IsNullOrWhiteSpace(contactPhone))
+            {
+                ContactPhone = contactPhone;
+                ContactPhoneNormalized = string.Concat(contactPhone.Where(char.IsDigit));
+            }
             Subject = subject;
             Arrival = arrival;
         }
@@ -16,6 +21,7 @@ namespace ciklonalozi.Data
         public int OrderId { get; set; }
         public string ContactName { get; set; }
         public string? ContactPhone { get; set; }
+        public string? ContactPhoneNormalized { get; set; }
         public string Subject { get; set; }
         public string? Description { get; set; }
         public DateTime Arrival { get; set; }
