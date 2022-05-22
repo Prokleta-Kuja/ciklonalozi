@@ -6,12 +6,14 @@ using ciklonalozi.Data;
 using ciklonalozi.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 
 namespace ciklonalozi.Modals
 {
     public partial class CreateOrder
     {
         [Parameter] public EventCallback OnSaved { get; set; }
+        [Inject] public IJSRuntime Js { get; set; } = null!;
         [Inject] public IDbContextFactory<AppDbContext> DbFactory { get; set; } = null!;
         bool Shown;
         CreateOrderModel Model = new();
@@ -41,14 +43,16 @@ namespace ciklonalozi.Modals
             var normalized = string.Concat(phoneNumber.Where(char.IsDigit));
 
             using var db = DbFactory.CreateDbContext();
-            var name = await db.Orders
+            var prev = await db.Orders
                 .Where(o => o.ContactPhoneNormalized == normalized)
                 .OrderByDescending(o => o.Arrival)
-                .Select(o => o.ContactName)
                 .FirstOrDefaultAsync();
 
-            if (!string.IsNullOrWhiteSpace(name))
-                Model.ContactName = name;
+            if (prev != null)
+            {
+                Model.ContactName = prev.ContactName;
+                Model.Subject = prev.Subject;
+            }
         }
         async Task SaveClicked()
         {
@@ -68,6 +72,9 @@ namespace ciklonalozi.Modals
 
             if (OnSaved.HasDelegate)
                 await OnSaved.InvokeAsync();
+
+            if (order.Arrived.HasValue)
+                await Js.InvokeVoidAsync("open", $"/print/{order.OrderId}", "_blank");
 
             Hide();
         }

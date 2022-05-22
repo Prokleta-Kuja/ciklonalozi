@@ -5,6 +5,12 @@ namespace ciklonalozi
 {
     public static class C
     {
+        public static class Env
+        {
+            public static readonly string URL = Environment.GetEnvironmentVariable(nameof(URL)) ?? "http://localhost:5000/";
+            public static readonly string SALT = Environment.GetEnvironmentVariable(nameof(SALT)) ?? "promijeni me";
+            public static readonly string ALPHABET = Environment.GetEnvironmentVariable(nameof(ALPHABET)) ?? "ABCDEFGHIJKLMNOPRSTUVZ0123456789";
+        }
         public static class Routes
         {
             public const string Root = "/";

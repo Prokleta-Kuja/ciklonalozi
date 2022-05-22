@@ -13,13 +13,13 @@
                     </div>
                     <div class="modal-body">
                         <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=PhoneNumber
-                        Errors=Errors AutoFocus />
+                        Errors=Errors AutoFocus AutoComplete=off />
                         <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
-                        Errors=Errors Required />
+                        Errors=Errors Required AutoComplete=off />
                         <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
-                        Required />
+                        Required AutoComplete=off />
                         <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
-                        Errors=Errors />
+                        Errors=Errors AutoComplete=off />
                         <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label=Datum
                         @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
                         <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival

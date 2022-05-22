@@ -4,11 +4,13 @@
 
 <!DOCTYPE html>
 <html lang="hr">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ciklo-Sport Nalog</title>
-    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
+    <title>Ciklo-Sport Nalog @Model.Order?.OrderId.ToString("#,000")</title>
+    <link rel="stylesheet" href="/css/bootstrap-night.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-icons.min.css" />
     <link href="/css/site.css" rel="stylesheet" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -18,28 +20,95 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    
+
 </head>
+
 <body>
-    @if(Model.Order == null)
+    @if (Model.Order == null)
     {
-        <h4>Nema</h4>
+            <h4>Nalog nije pronađen</h4>
+    }
+    else if (Model.Order.Removed)
+    {
+            <p>Nalog je brisan pa nema smisla išta printati</p>
     }
     else
     {
-        <div class="d-grid d-print-none m-3">
-            <button class="btn btn-success btn-block" type="button" onclick="window.print()">Print</button>
-        </div>
-        <h1><u>Uradi sam</u></h1>
-        <h1>@Model.Order.Subject</h1>
-        <p>@Model.Order.Description</p>
-        <p>Dolazak: @Model.Order.Arrived?.ToString("dd. MM. yyyy.")</p>
+        @* Ovo se neće printanti zbog klase d-print-none *@
+            <div class="d-grid d-print-none m-3">
+                <button class="btn btn-success btn-block" type="button" onclick="window.print()">Print</button>
+            </div>
+
+            <div id=qrcode></div>
+
+            <h1><u>Uradi sam</u></h1>
+            <h1>@Model.Order.ContactName - @Model.Order.Subject</h1>
+            <h6>@Model.Order.ContactPhone</h6>
+            <p>@Model.Order.Description</p>
+        @* Datum najave, uvijek ima vrijednost *@
+            <p>Najava @Model.Order.Arrival</p>
+
+        @* Datum dolaska, može biti prazno ako je samo najava u pitanju *@
+        @if (Model.Order.Arrived.HasValue)
+        {
+                    <p>Dolazak: @Model.Order.Arrived.Value.ToString("dd. MM. yyyy.")</p>
+
+        }
+        else
+        {
+                    <p>Nije dostavio biciklo</p>
+        }
+
+        @* Završni datum, može biti prazan ako nije zavšen servis *@
+        @if (Model.Order.Completed.HasValue)
+        {
+                    <p>Servis je gotov: @Model.Order.Completed</p>
+        }
+        else
+        {
+                    <p>Servis nije svršio</p>
+        }
+
+        @* Datum preuzimanja *@
+        @if (Model.Order.Returned.HasValue)
+        {
+                    <p>Korisnik je preuzeo biciklo: @Model.Order.Returned</p>
+        }
+        else
+        {
+                    <p>Korisnik nije preuzeo biciklo</p>
+        }
+
+        @* Ovaj div označava prelazak na novu print stranicu *@
+            <div style="page-break-after: always;"></div>
+
+            <h1>Ovo je druga stranica</h1>
+            <p>Na njoj možeš opet ponoviti nešto sa prve stranice ali sa različitim dizajnom. Iliti da uštediš na toneru.</p>
     }
-    
-    <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/easy-qrcode.min.js"></script>
     <script>
+        // Opcije prilikom generiranja
+        var options = {
+            text: "@Model.OrderLink",
+            quietZone: 10,
+
+            // logo: "/cs-logo-300.png", // mora biti png...
+            // logoWidth: 150,
+            // logoHeight: 82,
+            // Za više opcija https://github.com/ushelp/EasyQRCodeJS#options
+        };
+
+        // Ova linija dodaje qr u div
+        new QRCode(document.getElementById("qrcode"), options);
+
+        // Ovo možda bolje zakomentiraj dok prčkaš po stranici da te ne jebe
+        // Ova linija otvara print dialog
         window.print();
+        // Ova linija zatvara tab, ali tek nakon što je print dialog završio
+        window.close();
     </script>
 </body>
-</html>
 
+</html>

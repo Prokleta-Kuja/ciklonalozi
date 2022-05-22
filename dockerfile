@@ -18,7 +18,9 @@ ENV TZ="Europe/Zagreb" \
     Auth__GitHubId="INVALID" \
     Auth__GitHubSecret="INVALID" \
     Auth__GitHubUsers__0="INVALID1" \
-    Auth__GitHubUsers__1="INVALID2"
+    Auth__GitHubUsers__1="INVALID2" \
+    URL="http://localhost:5000" \
+    SALT="CHANGE ME" 
 
 EXPOSE 50505
 
