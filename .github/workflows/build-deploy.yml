@@ -43,7 +43,7 @@ jobs:
           remote_key: ${{ secrets.SSH_KEY }}
         run: |
           mkdir ~/.ssh          
-          echo $remote_key > ~/.ssh/id_rsa
+          echo "$remote_key" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           hosts="$(dig +short "$remote_host" | grep -v '\.$' | sed -z 's|\n|,|g')$remote_host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
