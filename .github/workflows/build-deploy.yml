@@ -47,6 +47,6 @@ jobs:
           hosts="$(dig +short "$remote_host" | grep -v '\.$' | sed -z 's|\n|,|g')$remote_host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
       - name: Run remotely
-        run: ssh $remote_user@$remote_host "pwd; ls -hal"
+        run: ssh -p "$remote_port" "$remote_user@$remote_host" "pwd; ls -hal"
       - name: Remove SSH key
         run: rm ~/.ssh/id_rsa
