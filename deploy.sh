@@ -25,3 +25,5 @@ docker create \
   --restart unless-stopped \
   ghcr.io/prokleta-kuja/ciklonalozi:$Tag
 docker start nalogica
+
+docker system prune -af
