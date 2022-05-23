@@ -39,11 +39,12 @@ jobs:
         run: install -m 600 -D /dev/null ~/.ssh/id_rsa
       - name: Fill key
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      - name: keyscan
-        run: |
-          host='${{ secrets.SSH_HOST }}'
-          hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
-          echo $hosts
-          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+      - name: Fill known hosts
+        run: echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+# How to generate SSH_KNOWN_HOSTS
+# host='my-host.example.com'
+# hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+# ssh-keyscan -H "$hosts" > my_known_hosts
+# cat my_known_hosts
       - name: Run remotely
         run: ssh ${{ secrets.SSH_HOST }} "pwd; ls -hal"
