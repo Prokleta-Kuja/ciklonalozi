@@ -3,10 +3,10 @@ name: Build & Deploy
 on:
   workflow_dispatch:
     inputs:
-      reason:
-        description: 'Reason'     
-        required: false
-        default: 'Manual deploy'
+      build:
+        description: 'Build'     
+        required: true
+        default: false
   push:
     branches:
       - 'main'
@@ -15,6 +15,7 @@ jobs:
   build:
     name: Docker
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || github.event.inputs.build }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -37,7 +38,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    #if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Production
         run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
