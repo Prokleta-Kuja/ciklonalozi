@@ -35,16 +35,16 @@ jobs:
     runs-on: ubuntu-latest
     # needs: build
     steps:
-      - name: Create empty key
-        run: install -m 600 -D /dev/null ~/.ssh/id_rsa
-      - name: Fill key
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      - name: Fill known hosts
-        run: echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-# How to generate SSH_KNOWN_HOSTS
-# host='my-host.example.com'
-# hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
-# ssh-keyscan -H "$hosts" > my_known_hosts
-# cat my_known_hosts
+      - name: Prepare SSH
+        env:
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: ${{ secrets.SSH_PORT }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.SSH_KEY }}
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/github_rsa
+          echo $remote_key > ~/.ssh/github_rsa
+          hosts="$(dig +short "$remote_host" | grep -v '\.$' | sed -z 's|\n|,|g')$remote_host"
+          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
       - name: Run remotely
-        run: ssh ${{ secrets.SSH_HOST }} "pwd; ls -hal"
+        run: ssh -p ${remote_port} -i ~/.ssh/github_rsa ${remote_user}@${remote_host} "pwd; ls -hal"
