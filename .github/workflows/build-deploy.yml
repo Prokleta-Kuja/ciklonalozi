@@ -42,9 +42,9 @@ jobs:
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.SSH_KEY }}
         run: |
-          install -m 600 -D /dev/null ~/.ssh/github_rsa
-          echo $remote_key > ~/.ssh/github_rsa
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo $remote_key > ~/.ssh/id_rsa
           hosts="$(dig +short "$remote_host" | grep -v '\.$' | sed -z 's|\n|,|g')$remote_host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
       - name: Run remotely
-        run: ssh -p ${remote_port} -i ~/.ssh/github_rsa ${remote_user}@${remote_host} "pwd; ls -hal"
+        run: ssh -p $remote_port $remote_user@$remote_host "pwd; ls -hal"
