@@ -42,9 +42,12 @@ jobs:
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.SSH_KEY }}
         run: |
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          mkdir ~/.ssh          
           echo $remote_key > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           hosts="$(dig +short "$remote_host" | grep -v '\.$' | sed -z 's|\n|,|g')$remote_host"
           ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
-          ssh -p $remote_port $remote_user@$remote_host "pwd; ls -hal"
+          ssh -p $remote_port -i ~/.ssh/id_rsa $remote_user@$remote_host "pwd; ls -hal"
           rm ~/.ssh/id_rsa
+
+# install -m 600 -D /dev/null ~/.ssh/id_rsa
