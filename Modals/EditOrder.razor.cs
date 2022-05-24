@@ -80,11 +80,14 @@ namespace ciklonalozi.Modals
             OriginalOrder.RealPrice = Model.RealPrice;
             OriginalOrder.Removed = Model.Removed;
 
+            Hide();
+
             if (PushSend)
             {
+                PushSend = false;
                 var webPushClient = new WebPushClient();
                 var url = C.Hasher.GetQrUrl(OriginalOrder.OrderId);
-                var notification = JsonSerializer.Serialize(new { title = PushTitle, message = PushBody, url = url });
+                var notification = JsonSerializer.Serialize(new { title = PushTitle, message = PushBody, url });
                 try
                 {
                     await webPushClient.SendNotificationAsync(
@@ -103,8 +106,6 @@ namespace ciklonalozi.Modals
 
             if (OnSaved.HasDelegate)
                 await OnSaved.InvokeAsync();
-
-            Hide();
         }
     }
 }
