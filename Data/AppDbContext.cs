@@ -1,13 +1,15 @@
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ciklonalozi.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IDataProtectionKeyContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
