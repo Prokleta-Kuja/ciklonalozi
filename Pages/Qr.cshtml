@@ -38,7 +38,34 @@
         @* Tu je sve ok i koristi Model.Order kako hoćeš po uzoru na Print.cshtml *@
         <h1>@Model.Order.ContactName</h1>
     }
-    <script src="js/bootstrap.min.js"></script>
+    <button onclick="kita()">Kita</button>
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+        const kita = async () => {
+            if (!("Notification" in window)) {
+                return;
+            }
+
+            // Check if push messaging is supported
+            if (!('PushManager' in window)) {
+                return;
+            }
+
+            if (!('serviceWorker' in navigator)) {
+                return false;
+            }
+
+            registration = await navigator.serviceWorker.register("/js/push-handler.js'");
+            registration.update();
+
+            // Are Notifications supported in the service worker?
+            if (!(registration.showNotification)) {
+                return;
+            }
+
+            console.log(Notification.permission);
+        };
+    </script>
 </body>
 
 </html>

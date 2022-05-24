@@ -31,5 +31,11 @@ namespace ciklonalozi.Data
         public decimal? EstimatedPrice { get; set; }
         public decimal? RealPrice { get; set; }
         public bool Removed { get; set; }
+
+        // push
+        public bool CanPush => !string.IsNullOrWhiteSpace(Endpoint) && !string.IsNullOrWhiteSpace(P256DH) && !string.IsNullOrWhiteSpace(Auth);
+        public string? Endpoint { get; set; }
+        public string? P256DH { get; set; }
+        public string? Auth { get; set; }
     }
 }
