@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using ciklonalozi.Data;
-using HashidsNet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +12,16 @@ namespace ciklonalozi.Pages
         public Order? Order { get; private set; }
         public bool Fail { get; private set; }
         private readonly IDbContextFactory<AppDbContext> _dbFactory;
-        private readonly Hashids _ids;
         public Qr(IDbContextFactory<AppDbContext> factory)
         {
             _dbFactory = factory;
-            _ids = new Hashids(C.Env.SALT, 4, C.Env.ALPHABET);
         }
         public async Task OnGet(string id)
         {
             int orderId;
             try
             {
-                orderId = _ids.DecodeSingle(id.ToUpper());
+                orderId = C.Hasher.Ids.DecodeSingle(id.ToUpper());
             }
             catch (System.Exception)
             {
@@ -34,6 +31,40 @@ namespace ciklonalozi.Pages
 
             using var db = _dbFactory.CreateDbContext();
             Order = await db.Orders.FindAsync(orderId);
+        }
+        public async Task OnPost(string id, string? e, string? p, string? a)
+        {
+            int orderId;
+            try
+            {
+                orderId = C.Hasher.Ids.DecodeSingle(id.ToUpper());
+            }
+            catch (System.Exception)
+            {
+                Fail = true;
+                return;
+            }
+
+            using var db = _dbFactory.CreateDbContext();
+            Order = await db.Orders.FindAsync(orderId);
+
+            if (Order != null)
+            {
+                if (string.IsNullOrWhiteSpace(e) || string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(a))
+                {
+                    Order.Endpoint = null;
+                    Order.P256DH = null;
+                    Order.Auth = null;
+                }
+                else
+                {
+                    Order.Endpoint = e;
+                    Order.P256DH = p;
+                    Order.Auth = a;
+                }
+
+                await db.SaveChangesAsync();
+            }
         }
     }
 }

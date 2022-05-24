@@ -1,12 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ciklonalozi.Data;
 using ciklonalozi.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using WebPush;
 
 namespace ciklonalozi.Modals
 {
@@ -17,6 +19,9 @@ namespace ciklonalozi.Modals
         bool Shown;
         EditOrderModel Model = new();
         Order? OriginalOrder;
+        bool PushSend;
+        string? PushTitle;
+        string? PushBody;
         private Dictionary<string, string>? Errors;
         public void Show(Order order)
         {
@@ -33,6 +38,9 @@ namespace ciklonalozi.Modals
             Model.EstimatedPrice = order.EstimatedPrice;
             Model.RealPrice = order.RealPrice;
             Model.Removed = order.Removed;
+
+            PushTitle = "Servis završen";
+            PushBody = "Možete preuzeti svoj bicikl";
 
             Shown = true;
             StateHasChanged();
@@ -71,6 +79,25 @@ namespace ciklonalozi.Modals
             OriginalOrder.EstimatedPrice = Model.EstimatedPrice;
             OriginalOrder.RealPrice = Model.RealPrice;
             OriginalOrder.Removed = Model.Removed;
+
+            if (PushSend)
+            {
+                var webPushClient = new WebPushClient();
+                var url = C.Hasher.GetQrUrl(OriginalOrder.OrderId);
+                var notification = JsonSerializer.Serialize(new { title = PushTitle, message = PushBody, url = url });
+                try
+                {
+                    await webPushClient.SendNotificationAsync(
+                        new(OriginalOrder.Endpoint, OriginalOrder.P256DH, OriginalOrder.Auth),
+                        notification,
+                        C.Vapid.Current);
+                }
+                catch (WebPushException ex)
+                {
+                    if (ex.StatusCode == HttpStatusCode.Gone)
+                        OriginalOrder.Endpoint = OriginalOrder.P256DH = OriginalOrder.Auth = null;
+                }
+            }
 
             await db.SaveChangesAsync();
 

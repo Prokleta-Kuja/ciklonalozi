@@ -18,9 +18,7 @@ namespace ciklonalozi.Pages
         }
         public async Task OnGet(int id)
         {
-            var ids = new Hashids(C.Env.SALT, 4, C.Env.ALPHABET);
-            var hash = ids.Encode(id);
-            OrderLink = $"{C.Env.URL.TrimEnd('/')}/nalog/{hash}";
+            OrderLink = C.Hasher.GetQrUrl(id);
 
             using var db = _dbFactory.CreateDbContext();
             Order = await db.Orders.FindAsync(id);

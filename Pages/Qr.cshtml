@@ -38,15 +38,57 @@
         @* Tu je sve ok i koristi Model.Order kako hoćeš po uzoru na Print.cshtml *@
         <h1>@Model.Order.ContactName</h1>
     }
-    <button onclick="kita()">Kita</button>
+
+    @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
+    <div id=denied class="d-none">
+        Slanje obavijesti nije dozvoljeno. Omogućite u svom pregledniku.
+    </div>
+
+    @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti ali ne za ovaj nalog *@
+    <div id=granted class="d-none">
+        <button onclick="subscribe()">Primi obavijest i za ovaj servis</button>
+    </div>
+
+    @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti za ovaj nalog *@
+    <div id=granted-subscribed class="d-none">
+        Primiti ćete obavijest kada servis završi.
+        <button onclick="unsubscribe()">Otkaži</button>
+    </div>
+
+    @* Ovo se prikazuje ako možemo pitati da li želi primanje obavijesti *@
+    <div id=default class="d-none">
+        <button onclick="subscribe()">Primi obavijest kad završi servis</button>
+    </div>
+
+    @* Ovo se prikazuje kada nešto ode u kurac. Bitno je da korisnik zna da neće dobiti obavijest *@
+    <div id=error class="d-none">
+        Udarila nas vrućina i nismo te mogli zabilježiti za primanje obavijesti. Probaj kasnije te nam reci kada nas
+        vidiš da nisi uspio kako bi mogli istražiti.
+    </div>
+
+    @* Ovo ne diraj *@
+    <form id=subform action="" method="post" class=d-none>
+        <input id=e name=e>
+        <input id=p name=p>
+        <input id=a name=a>
+        @Html.AntiForgeryToken()
+        <button type="submit"></button>
+    </form>
+
     <script src="/js/bootstrap.min.js"></script>
     <script>
-        const kita = async () => {
+        var registration;
+        const loaded = @(Model.Order == null ? "false" : "true");
+        const subscribed = @Model.Order?.CanPush.ToString().ToLower();
+        (async () => {
+            if (!loaded) {
+                return;
+            }
+
             if (!("Notification" in window)) {
                 return;
             }
 
-            // Check if push messaging is supported
             if (!('PushManager' in window)) {
                 return;
             }
@@ -55,16 +97,98 @@
                 return false;
             }
 
-            registration = await navigator.serviceWorker.register("/js/push-handler.js'");
+            registration = await navigator.serviceWorker.register("/js/push-handler.js");
             registration.update();
 
-            // Are Notifications supported in the service worker?
             if (!(registration.showNotification)) {
                 return;
             }
 
-            console.log(Notification.permission);
-        };
+            if (Notification.permission == 'granted') {
+                if (subscribed)
+                    document.getElementById('granted-subscribed').className = "d-block";
+                else
+                    document.getElementById('granted').className = "d-block";
+            }
+            else if (Notification.permission == 'denied') {
+                document.getElementById('denied').className = "d-block";
+            }
+            else {
+                document.getElementById('default').className = "d-block";
+            }
+        })();
+
+        const saveSubscription = async (subscription) => {
+            if (subscription) {
+                let sub = getWebPushSubscriptionObject(subscription);
+
+                document.getElementById('e').value = sub.endpoint;
+                document.getElementById('p').value = sub.p256DH;
+                document.getElementById('a').value = sub.auth;
+
+                document.getElementById("subform").submit();
+            }
+            else {
+                subscribe();
+                document.getElementById('error').className = "d-block";
+            }
+        }
+
+        const unsubscribe = async () => {
+            let subscription = await registration.pushManager.getSubscription();
+            if (subscription)
+                await subscription.unsubscribe();
+
+            document.getElementById("subform").submit();
+        }
+
+        const subscribe = async () => {
+            let permission = await Notification.requestPermission();
+
+            if (permission !== 'granted') {
+                window.location.href = window.location.href
+                return;
+            }
+
+            let subscription = await registration.pushManager.getSubscription();
+
+            if (subscription) {
+                saveSubscription(subscription);
+            }
+
+            var subscribeParams = { userVisibleOnly: true };
+            subscribeParams.applicationServerKey = urlB64ToUint8Array('@ciklonalozi.C.Vapid.Current.PublicKey');
+
+            subscription = await registration.pushManager.subscribe(subscribeParams);
+            saveSubscription(subscription);
+        }
+
+        const getWebPushSubscriptionObject = (subscription) => {
+            return {
+                endpoint: subscription.endpoint,
+                p256DH: base64Encode(subscription.getKey('p256dh')),
+                auth: base64Encode(subscription.getKey('auth'))
+            };
+        }
+
+        const urlB64ToUint8Array = (base64String) => {
+            var padding = '='.repeat((4 - base64String.length % 4) % 4);
+            var base64 = (base64String + padding)
+                .replace(/\-/g, '+')
+                .replace(/_/g, '/');
+
+            var rawData = window.atob(base64);
+            var outputArray = new Uint8Array(rawData.length);
+
+            for (var i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
+        const base64Encode = (arrayBuffer) => {
+            return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)));
+        }
     </script>
 </body>
 

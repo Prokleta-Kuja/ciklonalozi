@@ -22,8 +22,14 @@
                                 Required />
                                 <TextBox For=@nameof(EditOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
                                 Errors=Errors />
-                                <CheckBox For=@nameof(EditOrderModel.Removed) Label=Brisano @bind-Value=Model.Removed
-                                Errors=Errors />
+                                <div class="d-flex justify-content-around">
+                                    <CheckBox For=@nameof(EditOrderModel.Removed) Label=Brisano @bind-Value=Model.Removed
+                                    Errors=Errors />
+                                    @if(OriginalOrder?.CanPush ?? false)
+                                    {
+                                        <CheckBox For=@nameof(PushSend) Label=Poruka @bind-Value=PushSend />
+                                    }
+                                </div>
                             </div>
                             <div class="col">
                                 <DateTimeBox For=@nameof(EditOrderModel.Arrival) Label=Dolazak @bind-Value=Model.Arrival
@@ -43,6 +49,11 @@
                                 Errors=Errors />
                             </div>
                         </div>
+                        @if(PushSend)
+                        {
+                            <TextBox Label=Naslov @bind-Value=PushTitle />
+                            <TextBox Label=Sadržaj @bind-Value=PushBody Lines=2 />
+                        }
                     </div>
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-outline-danger" @onclick=Hide>Odustani</button>

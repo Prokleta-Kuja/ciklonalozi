@@ -10,12 +10,14 @@ self.addEventListener('push', function (event) {
 
     let title = data.title;
     let message = data.message;
+    let url = data.url;
     let icon = "/apple-touch-icon.png";
 
     // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
     event.waitUntil(self.registration.showNotification(title, {
         body: message,
         icon: icon,
+        data: { url: url }
     }));
 });
 
