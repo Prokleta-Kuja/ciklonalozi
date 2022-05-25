@@ -22,6 +22,8 @@ docker create \
   -e Auth__GitHubUsers__0="USER_0" \
   -e Auth__GitHubUsers__1="USER_1" \
   -e LOCALE=hr \
+  -e URL="http://localhost:5000" \
+  -e SALT="CHANGE ME" \
   --restart unless-stopped \
   ghcr.io/prokleta-kuja/ciklonalozi:$Tag
 docker start nalogica

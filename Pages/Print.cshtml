@@ -90,6 +90,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/easy-qrcode.min.js"></script>
     <script>
+
         // Opcije prilikom generiranja
         var options = {
             text: "@Model.OrderLink",
@@ -105,10 +106,9 @@
         new QRCode(document.getElementById("qrcode"), options);
 
         // Ovo možda bolje zakomentiraj dok prčkaš po stranici da te ne jebe
-        // Ova linija otvara print dialog
         window.print();
-        // Ova linija zatvara tab, ali tek nakon što je print dialog završio
-        window.close();
+        // Ova linija zatvara tab, ali može raditi sranja
+        setTimeout(window.close, 100);
     </script>
 </body>
 

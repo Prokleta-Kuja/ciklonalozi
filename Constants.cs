@@ -15,7 +15,7 @@ namespace ciklonalozi
             public static string GetQrUrl(int id)
             {
                 var hash = Ids.Encode(id);
-                return $"{Env.URL.TrimEnd('/')}/nalog/{hash}";
+                return $"{Env.URL.TrimEnd('/')}/{hash}";
             }
         }
         public static class Env

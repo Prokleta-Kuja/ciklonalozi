@@ -23,9 +23,8 @@ namespace ciklonalozi.Modals
         string? PushTitle;
         string? PushBody;
         private Dictionary<string, string>? Errors;
-        public void Show(Order order)
+        public async Task Show(Order order)
         {
-            OriginalOrder = order;
 
             Model.ContactName = order.ContactName;
             Model.ContactPhone = order.ContactPhone;
@@ -42,6 +41,11 @@ namespace ciklonalozi.Modals
             PushTitle = "Servis završen";
             PushBody = "Možete preuzeti svoj bicikl";
 
+            // Update original if changed in the meantime
+            using var db = DbFactory.CreateDbContext();
+            await db.Entry(order).ReloadAsync();
+            OriginalOrder = order;
+
             Shown = true;
             StateHasChanged();
         }
@@ -49,6 +53,7 @@ namespace ciklonalozi.Modals
         {
             Model = new();
             Shown = false;
+            PushSend = false;
             StateHasChanged();
         }
         async Task SaveClicked()
@@ -84,7 +89,6 @@ namespace ciklonalozi.Modals
 
             if (PushSend)
             {
-                PushSend = false;
                 var webPushClient = new WebPushClient();
                 var url = C.Hasher.GetQrUrl(OriginalOrder.OrderId);
                 var notification = JsonSerializer.Serialize(new { title = PushTitle, message = PushBody, url });

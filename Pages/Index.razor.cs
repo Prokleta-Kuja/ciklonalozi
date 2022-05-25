@@ -90,7 +90,7 @@ namespace ciklonalozi.Pages
             await db.SaveChangesAsync();
         }
         void AddClicked() => CreateOrderModal?.Show();
-        void EditClicked(Order order) => EditOrderModal?.Show(order);
+        async Task EditClicked(Order order) => await EditOrderModal!.Show(order);
         string Display(DateTime? dt, bool showTime = true, string empty = "-")
         {
             if (!dt.HasValue)

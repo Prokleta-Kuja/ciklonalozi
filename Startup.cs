@@ -3,6 +3,7 @@ using ciklonalozi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,7 @@ namespace ciklonalozi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCookiePolicy(new() { MinimumSameSitePolicy = SameSiteMode.Lax });
             }
             else
             {
