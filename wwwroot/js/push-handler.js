@@ -11,7 +11,7 @@ self.addEventListener('push', function (event) {
     let title = data.title;
     let opt = {
         body: data.message,
-        icon: "/apple-touch-icon.png",
+        icon: "/icons/apple-touch-icon.png",
         requireInteraction: true,
         data: { url: data.url }
     }
