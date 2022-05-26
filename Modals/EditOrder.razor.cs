@@ -98,11 +98,16 @@ namespace ciklonalozi.Modals
                         new(OriginalOrder.Endpoint, OriginalOrder.P256DH, OriginalOrder.Auth),
                         notification,
                         C.Vapid.Current);
+                    System.Console.WriteLine("Notification sent");
                 }
                 catch (WebPushException ex)
                 {
                     if (ex.StatusCode == HttpStatusCode.Gone)
                         OriginalOrder.Endpoint = OriginalOrder.P256DH = OriginalOrder.Auth = null;
+                }
+                catch (System.Exception ex)
+                {
+                    System.Console.WriteLine(ex.Message);
                 }
             }
 
