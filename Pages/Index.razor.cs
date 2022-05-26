@@ -104,6 +104,12 @@ namespace ciklonalozi.Pages
 
             return printDt.ToString(format);
         }
+        string Display(Decimal? num){
+            if(num.HasValue)
+            return num.Value.ToString("#,##0.00");
+            else
+            return "-";
+        }
         string GetStatusRowClass(Order order)
         {
             if (order.Removed)

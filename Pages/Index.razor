@@ -28,6 +28,7 @@
                 <th>Zaprimljeno</th>
                 <th>Završeno</th>
                 <th>Vraćeno</th>
+                <th>Cijena</th>
                 <th class="text-end">
                     <button class="btn btn-sm btn-primary" @onclick=AddClicked>Dodaj</button>
                 </th>
@@ -63,6 +64,7 @@
                         <td>@Display(order.Arrived)</td>
                         <td>@Display(order.Completed)</td>
                         <td>@Display(order.Returned)</td>
+                        <td>@Display(order.RealPrice)</td>
                         <td class="text-end">
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-primary" @onclick=@(()=>EditClicked(order))>Izmijeni</button>
