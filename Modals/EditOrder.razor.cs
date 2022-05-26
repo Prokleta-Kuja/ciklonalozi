@@ -53,7 +53,6 @@ namespace ciklonalozi.Modals
         {
             Model = new();
             Shown = false;
-            PushSend = false;
             StateHasChanged();
         }
         async Task SaveClicked()
@@ -89,6 +88,7 @@ namespace ciklonalozi.Modals
 
             if (PushSend)
             {
+                PushSend = false;
                 var webPushClient = new WebPushClient();
                 var url = C.Hasher.GetQrUrl(OriginalOrder.OrderId);
                 var notification = JsonSerializer.Serialize(new { title = PushTitle, message = PushBody, url });
@@ -98,7 +98,6 @@ namespace ciklonalozi.Modals
                         new(OriginalOrder.Endpoint, OriginalOrder.P256DH, OriginalOrder.Auth),
                         notification,
                         C.Vapid.Current);
-                    System.Console.WriteLine("Notification sent");
                 }
                 catch (WebPushException ex)
                 {
