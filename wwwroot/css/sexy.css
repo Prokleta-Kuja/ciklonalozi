@@ -1,0 +1,25 @@
+table.print-table {
+    width: 100%;
+    font-size: 12px;
+}
+td.print-td {
+    width: 50%;
+}
+p.print-p {
+    font-size: 12px;
+}
+p.print-header {
+    font-size: 10px;
+    margin: 0;
+}
+p.print-contactinfo {
+    font-size: 12px;
+    margin: 0;
+}
+div.print-footer {
+    position: fixed;
+    text-align: center;
+    font-size: 10px;
+    bottom: 0px;
+    width: 100%;
+}

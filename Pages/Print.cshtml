@@ -5,6 +5,38 @@
 <!DOCTYPE html>
 <html lang="hr">
 
+<style>
+    table.print-table {
+        width: 100%;
+        font-size: 12px;
+        border-bottom:1px solid; 
+        border-top:1px solid;
+    }
+    td.print-td {
+        width: 50%;
+        padding-bottom: 5px; 
+        padding-left: 10px;
+    }
+    p.print-p {
+        font-size: 12px;
+    }
+    p.print-header {
+        font-size: 10px;
+        margin: 0;
+    }
+    p.print-contactinfo {
+        font-size: 12px;
+        margin: 0;
+    }
+    div.print-footer {
+        position: fixed;
+        text-align: center;
+        font-size: 10px;
+        bottom: 0px;
+        width: 100%;
+    }
+</style>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,7 +59,7 @@
 <body>
     @if (Model.Order == null)
     {
-        <h4>Nalog nije pronađen</h4>
+        <h4>Radni nalog nije pronađen.</h4>
     }
     else if (Model.Order.Removed)
     {
@@ -40,52 +72,211 @@
             <button class="btn btn-success btn-block" type="button" onclick="window.print()">Print</button>
         </div>
 
-        <div id=qrcode></div>
-        <div>@Model.OrderLink</div>
+        @* <div id=qrcode></div> *@
+        @* <div>@Model.OrderLink</div> *@
+        
+        <div style="display: flex; justify-content: space-between;">
+            <div><img style="height: 80px; width: auto;" src="/images/cs-logo-300.png" /></div>
+            <div>
+                <p class="print-header"><b>CIKLO-SPORT d.o.o.</b></p>
+                <p class="print-header">Videkovići 24c</p>
+                <p class="print-header">10431 Sv. Nedelja</p>
+                <p class="print-header">tel: +385 1 788 8860</p>
+                <p class="print-header">e-mail: info@ciklo-sport.hr</p>
+            </div>
+        </div>
 
-        <h1><u>Uradi sam</u></h1>
-        <h1>@Model.Order.ContactName - @Model.Order.Subject</h1>
-        <h6>@Model.Order.ContactPhone</h6>
-        <p>@Model.Order.Description</p>
-        @* Datum najave, uvijek ima vrijednost *@
-        <p>Najava @Model.Order.Arrival</p>
+        <hr />
 
-        @* Datum dolaska, može biti prazno ako je samo najava u pitanju *@
-        @if (Model.Order.Arrived.HasValue)
-        {
-            <p>Dolazak: @Model.Order.Arrived.Value.ToString("dd. MM. yyyy.")</p>
+        <h3 style="text-align: center;">Radni nalog br.: @Model.Order.OrderId</h3>
 
-        }
+        <hr />
+
+        <div style="display: flex; justify-content: space-around;">
+            <div>
+                <p class="print-contactinfo"><b>Korisnik:</b></p>
+                <p class="print-contactinfo"><b>Kontakt telefon:</b></p>
+                <p class="print-contactinfo"><b>Predmet:</b></p>
+            </div>
+            <div>
+                <p class="print-contactinfo">@Model.Order.ContactName</p>
+                <p class="print-contactinfo">@Model.Order.ContactPhone</p>
+                <p class="print-contactinfo">@Model.Order.Subject</p>
+            </div>
+        </div>
+
+        <hr />
+
+        <table class="print-table">
+            <tr>
+                <td><b>Opis radova:</b></td>
+            </tr>
+            <tr>
+                <td class="print-td">@Model.Order.Description</td>
+            </tr>
+        </table>
+
+        @* Prikaz procjene iznosa radova ako je upisana *@
+        @if (Model.Order.EstimatedPrice.HasValue)
+            {
+                <p style="text-align: right; font-size: 9px;">Procjena iznosa: ~ @Model.Order.EstimatedPrice kn.</p>
+            }
         else
-        {
-            <p>Nije dostavio biciklo</p>
-        }
+            {
+                
+            }
 
-        @* Završni datum, može biti prazan ako nije zavšen servis *@
-        @if (Model.Order.Completed.HasValue)
-        {
-            <p>Servis je gotov: @Model.Order.Completed</p>
-        }
-        else
-        {
-            <p>Servis nije svršio</p>
-        }
+        <hr />
 
-        @* Datum preuzimanja *@
-        @if (Model.Order.Returned.HasValue)
-        {
-            <p>Korisnik je preuzeo biciklo: @Model.Order.Returned</p>
-        }
-        else
-        {
-            <p>Korisnik nije preuzeo biciklo</p>
-        }
+        <div style="display: flex; justify-content: space-between;">
+            <div><p class="print-p">Najavljeno: @Model.Order.Arrival</p></div>
+            <div>@* Datum dolaska, može biti prazno ako je samo najava u pitanju *@
+                @if (Model.Order.Arrived.HasValue)
+                    {
+                        <p class="print-p">Zaprimljeno: @Model.Order.Arrived</p>
+                    }
+                else
+                    {
+                        <p class="print-p">Predmet nije zaprimljen na dan ispisa.</p>
+                    }
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                @* Završni datum, može biti prazan ako nije zavšen servis *@
+                @if (Model.Order.Completed.HasValue)
+                    {
+                        <p class="print-p">Završeno: @Model.Order.Completed</p>
+                    }
+                else
+                    {
+                        @* <p class="print-p">Predmet nije završen</p> *@
+                    }
+            </div>
+            <div>
+                @* Datum preuzimanja *@
+                @if (Model.Order.Returned.HasValue)
+                    {
+                        <p class="print-p">Predmet preuzet: @Model.Order.Returned</p>
+                    }
+                else
+                    {
+                        @* <p class="print-p">Korisnik nije preuzeo predmet</p> *@
+                    }
+            </div>
+        </div>
+        
+        <p style="font-size: 10px;"><b>NAPOMENA:</b> svaki predmet je potrebno preuzeti najkasnije sedam (7) dana od dogovorenog datuma preuzimanja. Nakon isteka sedam (7) dana, svaki idući dan naplaćujemo 10,00 kuna po danu. Nakon 30 dana ne preuzetog predmeta, isti poklanjamo u dobrotvorne svrhe.</p>
+
+        <hr />
+
+        <p style="text-align: right; margin-right: 85px; padding-bottom: 10px; font-size: 12px;">Potpis korisnika:</p>
+        <p style="text-align: right; margin-bottom:0; font-size: 12px;">__________________________________</p>
+        <p style="text-align: right; font-size: 8px; color:#525252; margin-right:60px;">(@Model.Order.ContactName)</p>
+
+        <div class="print-footer"><b>CIKLO-SPORT d.o.o.</b> - Poslovnica 1 - Hrvatske Bratske Zajednice 4, 10000 Zagreb</div>
 
         @* Ovaj div označava prelazak na novu print stranicu *@
         <div style="page-break-after: always;"></div>
 
-        <h1>Ovo je druga stranica</h1>
-        <p>Na njoj možeš opet ponoviti nešto sa prve stranice ali sa različitim dizajnom. Iliti da uštediš na toneru.</p>
+        <div style="display: flex; justify-content: space-between;">
+            <div><img style="height: 80px; width: auto;" src="/images/cs-logo-300.png" /></div>
+            <div>
+                <p class="print-header"><b>CIKLO-SPORT d.o.o.</b></p>
+                <p class="print-header">Videkovići 24c</p>
+                <p class="print-header">10431 Sv. Nedelja</p>
+                <p class="print-header">tel: +385 1 788 8860</p>
+                <p class="print-header">e-mail: info@ciklo-sport.hr</p>
+            </div>
+        </div>
+
+        <hr />
+
+        <h3 style="text-align: center;">Radni nalog br.: @Model.Order.OrderId</h3>
+
+        <hr />
+
+        <div style="display: flex; justify-content: space-around;">
+            <div>
+                <p class="print-contactinfo"><b>Korisnik:</b></p>
+                <p class="print-contactinfo"><b>Kontakt telefon:</b></p>
+                <p class="print-contactinfo"><b>Predmet:</b></p>
+            </div>
+            <div>
+                <p class="print-contactinfo">@Model.Order.ContactName</p>
+                <p class="print-contactinfo">@Model.Order.ContactPhone</p>
+                <p class="print-contactinfo">@Model.Order.Subject</p>
+            </div>
+        </div>
+
+        <hr />
+
+        <table class="print-table">
+            <tr>
+                <td><b>Opis radova:</b></td>
+            </tr>
+            <tr>
+                <td class="print-td">@Model.Order.Description</td>
+            </tr>
+        </table>
+
+        @* Prikaz procjene iznosa radova ako je upisana *@
+        @if (Model.Order.EstimatedPrice.HasValue)
+            {
+                <p style="text-align: right; font-size: 9px;">Procjena iznosa: ~ @Model.Order.EstimatedPrice kn.</p>
+            }
+        else
+            {
+                
+            }
+
+        <hr />
+
+        <div style="display: flex; justify-content: space-between;">
+            <div><p class="print-p">Najavljeno: @Model.Order.Arrival</p></div>
+            <div>@* Datum dolaska, može biti prazno ako je samo najava u pitanju *@
+                @if (Model.Order.Arrived.HasValue)
+                    {
+                        <p class="print-p">Zaprimljeno: @Model.Order.Arrived</p>
+                    }
+                else
+                    {
+                        <p class="print-p">Predmet nije zaprimljen na dan ispisa.</p>
+                    }
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                @* Završni datum, može biti prazan ako nije zavšen servis *@
+                @if (Model.Order.Completed.HasValue)
+                    {
+                        <p class="print-p">Završeno: @Model.Order.Completed</p>
+                    }
+                else
+                    {
+                        @* <p class="print-p">Predmet nije završen</p> *@
+                    }
+            </div>
+            <div>
+                @* Datum preuzimanja *@
+                @if (Model.Order.Returned.HasValue)
+                    {
+                        <p class="print-p">Predmet preuzet: @Model.Order.Returned</p>
+                    }
+                else
+                    {
+                        @* <p class="print-p">Korisnik nije preuzeo predmet</p> *@
+                    }
+            </div>
+        </div>
+        
+        <p style="font-size: 10px;"><b>NAPOMENA:</b> svaki predmet je potrebno preuzeti najkasnije sedam (7) dana od dogovorenog datuma preuzimanja. Nakon isteka sedam (7) dana, svaki idući dan naplaćujemo 10,00 kuna po danu. Nakon 30 dana ne preuzetog predmeta, isti poklanjamo u dobrotvorne svrhe.</p>
+
+        <hr />
+
+        <div class="print-footer"><b>CIKLO-SPORT d.o.o.</b> - Poslovnica 1 - Hrvatske Bratske Zajednice 4, 10000 Zagreb</div>
     }
 
     <script src="/js/bootstrap.min.js"></script>
@@ -106,10 +297,10 @@
         // Ova linija dodaje qr u div
         new QRCode(document.getElementById("qrcode"), options);
 
-        // Ovo možda bolje zakomentiraj dok prčkaš po stranici da te ne jebe
+        @* // Ovo možda bolje zakomentiraj dok prčkaš po stranici da te ne jebe
         window.print();
         // Ova linija zatvara tab, ali može raditi sranja
-        setTimeout(window.close, 100);
+        setTimeout(window.close, 100); *@
     </script>
 </body>
 
