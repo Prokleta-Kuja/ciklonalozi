@@ -41,7 +41,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ciklo-Sport Nalog @Model.Order?.OrderId.ToString("#,000")</title>
-    <link rel="stylesheet" href="/css/bootstrap-night.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/print.css" />
     <link rel="stylesheet" href="/css/bootstrap-icons.min.css" />
     <link href="/css/site.css" rel="stylesheet" />
 
@@ -75,6 +76,7 @@
         @* <div id=qrcode></div> *@
         @* <div>@Model.OrderLink</div> *@
         
+    <div class="watermark">
         <div style="display: flex; justify-content: space-between;">
             <div><img style="height: 80px; width: auto;" src="/images/cs-logo-300.png" /></div>
             <div>
@@ -112,7 +114,7 @@
                 <td><b>Opis radova:</b></td>
             </tr>
             <tr>
-                <td class="print-td">@Model.Order.Description</td>
+                <td class="print-td" style="white-space: pre;">@Model.Order.Description</td>
             </tr>
         </table>
 
@@ -128,7 +130,7 @@
 
         <hr />
 
-        <div style="display: flex; justify-content: space-between;">
+        <div class="d-flex justify-content-around">
             <div><p class="print-p">Najavljeno: @Model.Order.Arrival</p></div>
             <div>@* Datum dolaska, može biti prazno ako je samo najava u pitanju *@
                 @if (Model.Order.Arrived.HasValue)
@@ -176,7 +178,7 @@
         <p style="text-align: right; font-size: 8px; color:#525252; margin-right:60px;">(@Model.Order.ContactName)</p>
 
         <div class="print-footer"><b>CIKLO-SPORT d.o.o.</b> - Poslovnica 1 - Hrvatske Bratske Zajednice 4, 10000 Zagreb</div>
-
+    </div>
         @* Ovaj div označava prelazak na novu print stranicu *@
         <div style="page-break-after: always;"></div>
 
@@ -295,12 +297,12 @@
         };
 
         // Ova linija dodaje qr u div
-        new QRCode(document.getElementById("qrcode"), options);
+        //new QRCode(document.getElementById("qrcode"), options);
 
         @* // Ovo možda bolje zakomentiraj dok prčkaš po stranici da te ne jebe
         window.print();
         // Ova linija zatvara tab, ali može raditi sranja
-        setTimeout(window.close, 100); *@
+        //setTimeout(window.close, 100); *@
     </script>
 </body>
 
