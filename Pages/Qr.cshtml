@@ -28,16 +28,23 @@
     @if (Model.Fail)
     {
         @* Upisano je neispravno smeće *@
-        <h1>Daj upiši kako treba</h1>
+        <h1 style="text-align: center;">Radni nalog nije pronađen.</h1>
+        <hr>
+        <p style="text-align: center;">Provjerite jeste li upisali ispravan URL.</p>
+        <p style="text-align: center;">Ako je upisan ispravan URL, a i dalje se ne prikazuje status naloga, kontaktirajte nas</p>
+        <p style="text-align: center;">telefonom na: <a href="tel:+38517888860">+385 1 788 8860</a></p>
+        <p style="text-align: center;">ili mailom na: <a href="mailto:info@ciklo-sport.hr">info@ciklo-sport.hr</a></p>
     }
     else if (Model.Order == null)
     {
         @* Smeće je dekodirano kako treba ali nalog nije pronađen. Ne bi se nikad smjelo dogoditi *@
+        <h1 style="text-align: center;">O-ooo, ovo se nije smjelo dogoditi.</h1>
+        <h3 style="text-align: center;">Radimo na otklanjanju problema.</h3>
     }
     else
     {
         @* Tu je sve ok i koristi Model.Order kako hoćeš po uzoru na Print.cshtml *@
-        <h1>@Model.Order.ContactName</h1>
+        <h1>Pozdrav @Model.Order.ContactName,</h1>
     }
 
     @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
@@ -63,8 +70,7 @@
 
     @* Ovo se prikazuje kada nešto ode u kurac. Bitno je da korisnik zna da neće dobiti obavijest *@
     <div id=error class="d-none">
-        Udarila nas vrućina i nismo te mogli zabilježiti za primanje obavijesti. Probaj kasnije te nam reci kada nas
-        vidiš da nisi uspio kako bi mogli istražiti.
+        Nažalost Vas nismo mogli zabilježiti za primanje obavijesti. Probajte ponovo kasnije, a ako i dalje ne radi nas informirajte kako bi mogli istražiti.
     </div>
 
     @* Ovo ne diraj *@

@@ -30,7 +30,9 @@
                 <th>Vraćeno</th>
                 <th>Cijena</th>
                 <th class="text-end">
-                    <button class="btn btn-sm btn-primary" @onclick=AddClicked>Dodaj</button>
+                    <button class="btn btn-sm btn-primary" @onclick=AddClicked>
+                        Novi nalog
+                    </button>
                 </th>
             </tr>
         </thead>
@@ -38,7 +40,7 @@
             @foreach (var date in Orders)
             {
                 <tr class="table-secondary">
-                    <td colspan=9>
+                    <td colspan=10>
                         <h6 class="mb-0"><i>@Display(date.Key, false)</i> @CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek)
                         </h6>
                     </td>
@@ -67,8 +69,12 @@
                         <td>@Display(order.RealPrice)</td>
                         <td class="text-end">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary" @onclick=@(()=>EditClicked(order))>Izmijeni</button>
-                                <a class="btn btn-sm btn-success" href="/print/@order.OrderId" target="_blank">Print</a>
+                                <button class="btn btn-sm btn-primary" style="font-size:large;" @onclick=@(()=>EditClicked(order))>
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <a class="btn btn-sm btn-success" style="font-size:large;" href="/print/@order.OrderId" target="_blank">
+                                    <i class="bi bi-printer-fill"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>
