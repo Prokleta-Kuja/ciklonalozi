@@ -1,0 +1,8 @@
+  .watermark
+  {
+      background-image: url('/images/cs-logo-45.svg');
+      background-repeat:repeat-y;
+      background-position: center;
+      background-attachment:fixed;
+      background-size:100%;
+  }
