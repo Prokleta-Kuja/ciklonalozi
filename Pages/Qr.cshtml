@@ -27,7 +27,7 @@
 <body>
     @if (Model.Fail)
     {
-        @* Upisano je neispravno smeće *@
+        @* Upisan je neispravan nalog *@
         <h1 style="text-align: center;">Radni nalog nije pronađen.</h1>
         <hr>
         <p style="text-align: center;">Provjerite jeste li upisali ispravan URL.</p>
@@ -37,38 +37,38 @@
     }
     else if (Model.Order == null)
     {
-        @* Smeće je dekodirano kako treba ali nalog nije pronađen. Ne bi se nikad smjelo dogoditi *@
-        <h1 style="text-align: center;">O-ooo, ovo se nije smjelo dogoditi.</h1>
+        @* Dekodirano je kako treba ali nalog nije pronađen. Ne bi se nikad smjelo dogoditi *@
+        <h1 style="text-align: center;">O-ooo, ovo se nije trebalo dogoditi.</h1>
         <h3 style="text-align: center;">Radimo na otklanjanju problema.</h3>
     }
     else
     {
-        @* Tu je sve ok i koristi Model.Order kako hoćeš po uzoru na Print.cshtml *@
+        @* Tu je sve ok i koristi Model.Order po uzoru na Print.cshtml *@
         <h1>Pozdrav @Model.Order.ContactName,</h1>
     }
 
     @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
     <div id=denied class="d-none">
-        Slanje obavijesti nije dozvoljeno. Omogućite u svom pregledniku.
+        Slanje obavijesti blokirano na Vašem uređaju. Ako se odlučite primati obavijesti, omogućite slanje obavijesti u svom pregledniku i probajte ponovo.
     </div>
 
     @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti ali ne za ovaj nalog *@
     <div id=granted class="d-none">
-        <button onclick="subscribe()">Primi obavijest i za ovaj servis</button>
+        <button onclick="subscribe()">Primajte obavijesti i za ovaj servis</button>
     </div>
 
     @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti za ovaj nalog *@
     <div id=granted-subscribed class="d-none">
-        Primiti ćete obavijest kada servis završi.
+        Primiti ćete obavijest kada servis bude završen.
         <button onclick="unsubscribe()">Otkaži</button>
     </div>
 
     @* Ovo se prikazuje ako možemo pitati da li želi primanje obavijesti *@
     <div id=default class="d-none">
-        <button class="btn btn-success" onclick="subscribe()">Primi obavijest kad završi servis</button>
+        <button class="btn btn-success" onclick="subscribe()">Primite obavijest kada servis bude završen.</button>
     </div>
 
-    @* Ovo se prikazuje kada nešto ode u kurac. Bitno je da korisnik zna da neće dobiti obavijest *@
+    @* Ovo se prikazuje kada nešto ode u klinac. Bitno je da korisnik zna da neće dobiti obavijest *@
     <div id=error class="d-none">
         Nažalost Vas nismo mogli zabilježiti za primanje obavijesti. Probajte ponovo kasnije, a ako i dalje ne radi nas informirajte kako bi mogli istražiti.
     </div>

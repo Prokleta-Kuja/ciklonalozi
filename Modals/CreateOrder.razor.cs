@@ -21,7 +21,7 @@ namespace ciklonalozi.Modals
         private Dictionary<string, string>? Errors;
         public void Show()
         {
-            Model.ArrivalOrArrived = DateTime.UtcNow.Date.AddHours(18);
+            Model.ArrivalOrArrived = DateTime.UtcNow.Date.AddHours(17);
             Shown = true;
             StateHasChanged();
         }
@@ -65,6 +65,7 @@ namespace ciklonalozi.Modals
                 order.Arrived = Model.ArrivalOrArrived.Value;
 
             order.Description = Model.Description;
+            order.EstimatedPrice = Model.EstimatedPrice;
 
             using var db = DbFactory.CreateDbContext();
             db.Orders.Add(order);

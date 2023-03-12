@@ -8,22 +8,28 @@ td.print-td {
     width: 50%;
     padding-bottom: 5px; 
     padding-left: 10px;
+    white-space: pre;
+    font-size: 10px;
+}
+td.print-td-description {
+    font-size: 12px;
 }
 p.print-p {
-    font-size: 12px;
+    font-size: 10px;
 }
 p.print-header {
     font-size: 10px;
     margin: 0;
+    text-align: right;
 }
 p.print-contactinfo {
-    font-size: 12px;
+    font-size: 10px;
     margin: 0;
 }
 div.print-footer {
     position: fixed;
     text-align: center;
-    font-size: 10px;
+    font-size: 8px;
     bottom: 0px;
     width: 100%;
 }

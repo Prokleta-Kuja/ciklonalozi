@@ -41,9 +41,8 @@
             <button class="btn btn-success btn-block" type="button" onclick="window.print()">Print</button>
         </div>
         
-    <div class="watermark">
-        <div style="display: flex; justify-content: space-between;">
-            <div><img style="height: 80px; width: auto;" src="/images/cs-logo-300.png" /></div>
+        <div class="d-flex justify-content-between">
+            <div><img style="height: 80px; width: auto;" src="/images/cs-300.png" /></div>
             <div>
                 <p class="print-header"><b>CIKLO-SPORT d.o.o.</b></p>
                 <p class="print-header">Videkovići 24c</p>
@@ -55,20 +54,20 @@
 
         <hr />
 
-        <h3 style="text-align: center;">Radni nalog br.: @Model.Order.OrderId</h3>
+        <div class="fs-5 text-center">Radni nalog br.: @Model.Order.OrderId </div>
 
         <hr />
 
         <div class="d-flex justify-content-around">
             <div>
                 <p class="print-contactinfo"><b>Korisnik:</b></p>
-                <p class="print-contactinfo"><b>Kontakt telefon:</b></p>
                 <p class="print-contactinfo"><b>Predmet:</b></p>
+                <p class="print-contactinfo"><b>Kontakt telefon:</b></p>
             </div>
-            <div>
+            <div class="text-end">
                 <p class="print-contactinfo">@Model.Order.ContactName</p>
-                <p class="print-contactinfo">@Model.Order.ContactPhone</p>
                 <p class="print-contactinfo">@Model.Order.Subject</p>
+                <p class="print-contactinfo">@Model.Order.ContactPhone</p>
             </div>
         </div>
 
@@ -76,17 +75,17 @@
 
         <table class="print-table">
             <tr>
-                <td><b>Opis radova:</b></td>
+                <td class="print-td-description"><b>Opis radova:</b></td>
             </tr>
             <tr>
-                <td class="print-td" style="white-space: pre;">@Model.Order.Description</td>
+                <td class="print-td">@Model.Order.Description</td>
             </tr>
         </table>
 
         @* Prikaz procjene iznosa radova ako je upisana *@
         @if (Model.Order.EstimatedPrice.HasValue)
             {
-                <p style="text-align: right; font-size: 9px;">Procjena iznosa: ~ @Model.Order.EstimatedPrice kn.</p>
+                <p style="text-align: right; font-size: 8px;">Okvirna procjena iznosa radova: ~@Model.Order.EstimatedPrice €</p>
             }
         else
             {
@@ -134,16 +133,14 @@
             </div>
         </div>
         
-        <p style="font-size: 10px;"><b>NAPOMENA:</b> svaki predmet je potrebno preuzeti najkasnije sedam (7) dana od dogovorenog datuma preuzimanja. Nakon isteka sedam (7) dana, svaki idući dan naplaćujemo 10,00 kuna po danu. Nakon 30 dana ne preuzetog predmeta, isti poklanjamo u dobrotvorne svrhe.</p>
+        <p style="font-size: 10px;"><b>NAPOMENA:</b> svaki predmet je potrebno preuzeti najkasnije pet (5) radnih dana od dogovorenog datuma preuzimanja. Nakon isteka pet (5) radnih dana, svaki sljedeći dan naplaćujemo 2,00 € po danu. Nakon 20 radnih dana ne preuzetog predmeta, isti poklanjamo u dobrotvorne svrhe.</p>
 
         <hr />
 
-        <p style="text-align: right; margin-right: 85px; padding-bottom: 10px; font-size: 12px;">Potpis korisnika:</p>
-        <p style="text-align: right; margin-bottom:0; font-size: 12px;">__________________________________</p>
-        <p style="text-align: right; font-size: 8px; color:#525252; margin-right:60px;">(@Model.Order.ContactName)</p>
+        <div class="me-5 text-end pb-3 pe-4" style="font-size: 10px;">Potpis korisnika:</div>
+        <div class="mb-0 text-end" style="font-size: 10px;">__________________________________</div>
+        <div class="me-5 text-end" style="font-size: 8px; color:#525252;">(@Model.Order.ContactName)</div>
 
-        <div class="print-footer"><b>CIKLO-SPORT d.o.o.</b> - Poslovnica 1 - Hrvatske Bratske Zajednice 4, 10000 Zagreb</div>
-    </div>
         @* Ovaj div označava prelazak na novu print stranicu *@
         <div style="page-break-after: always;"></div>
 
@@ -167,13 +164,13 @@
         <div class="d-flex justify-content-around">
             <div>
                 <p class="print-contactinfo"><b>Korisnik:</b></p>
-                <p class="print-contactinfo"><b>Kontakt telefon:</b></p>
                 <p class="print-contactinfo"><b>Predmet:</b></p>
+                <p class="print-contactinfo"><b>Kontakt telefon:</b></p>
             </div>
             <div>
                 <p class="print-contactinfo">@Model.Order.ContactName</p>
-                <p class="print-contactinfo">@Model.Order.ContactPhone</p>
                 <p class="print-contactinfo">@Model.Order.Subject</p>
+                <p class="print-contactinfo">@Model.Order.ContactPhone</p>
             </div>
         </div>
 
@@ -191,7 +188,7 @@
         @* Prikaz procjene iznosa radova ako je upisana *@
         @if (Model.Order.EstimatedPrice.HasValue)
             {
-                <p style="text-align: right; font-size: 9px;">Procjena iznosa: ~ @Model.Order.EstimatedPrice kn.</p>
+                <p style="text-align: right; font-size: 8px;">Okvirna procjena iznosa radova: ~@Model.Order.EstimatedPrice €</p>
             }
         else
             {
@@ -239,14 +236,16 @@
             </div>
         </div>
 
-        @* <div id=qrcode></div>
-        <div>@Model.OrderLink</div> *@
-        
-        <p style="font-size: 10px;"><b>NAPOMENA:</b> svaki predmet je potrebno preuzeti najkasnije sedam (7) dana od dogovorenog datuma preuzimanja. Nakon isteka sedam (7) dana, svaki idući dan naplaćujemo 10,00 kuna po danu. Nakon 30 dana ne preuzetog predmeta, isti poklanjamo u dobrotvorne svrhe.</p>
+        <div class="d-flex justify-content-around align-items-center m-3">
+            <div id=qrcode></div>
+            <p class="print-p ms-3">Status radnog naloga možete provjeriti skeniranjem QR koda ili odlaskom na link: @Model.OrderLink.</p>
+        </div>
+
+        <p style="font-size: 10px;"><b>NAPOMENA:</b> svaki predmet je potrebno preuzeti najkasnije pet (5) radnih dana od dogovorenog datuma preuzimanja. Nakon isteka pet (5) radnih dana, svaki sljedeći dan naplaćujemo 2,00 € po danu. Nakon 20 radnih dana ne preuzetog predmeta, isti poklanjamo u dobrotvorne svrhe.</p>
 
         <hr />
 
-        <div class="print-footer"><b>CIKLO-SPORT d.o.o.</b> - Poslovnica 1 - Hrvatske Bratske Zajednice 4, 10000 Zagreb</div>
+        <div class="print-footer"><b>CIKLO-SPORT d.o.o.</b> | Poslovnica: Hrvatske Bratske Zajednice 4, 10000 Zagreb</div>
     }
 
     <script src="/js/bootstrap.min.js"></script>
@@ -256,8 +255,9 @@
         // Opcije prilikom generiranja
         var options = {
             text: "@Model.OrderLink",
-            quietZone: 10,
-
+            quietZone: 5,
+            width: 90,
+            height: 90,
             // logo: "/images/cs-300.png", // mora biti png...
             // logoWidth: 150,
             // logoHeight: 82,
@@ -265,7 +265,7 @@
         };
 
         // Ova linija dodaje qr u div
-        //new QRCode(document.getElementById("qrcode"), options);
+        new QRCode(document.getElementById("qrcode"), options);
 
         @* // Ovo možda bolje zakomentiraj dok prčkaš po stranici da te ne jebe
         window.print();

@@ -20,6 +20,7 @@
                         Required AutoComplete=off />
                         <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
                         Errors=Errors AutoComplete=off />
+                        <NumBox For=@nameof(CreateOrderModel.EstimatedPrice) Label="Procjena iznosa radova" @bind-Value=Model.EstimatedPrice Errors=Errors />
                         <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label=Datum
                         @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
                         <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival

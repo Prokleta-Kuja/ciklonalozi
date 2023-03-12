@@ -12,6 +12,7 @@ namespace ciklonalozi.Models
         public string? Description { get; set; }
         public DateTime? ArrivalOrArrived { get; set; }
         public bool IsArrival { get; set; }
+        public decimal? EstimatedPrice { get; set; }
 
         public Dictionary<string, string>? Validate()
         {
