@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/net6.0/ciklonalozi.dll",
+            "program": "${workspaceFolder}/bin/Debug/net7.0/ciklonalozi.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -21,6 +21,7 @@
             // },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS":"https://localhost:5001",
                 "URL":"https://localhost:5001"
             },
             "sourceFileMap": {

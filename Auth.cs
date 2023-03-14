@@ -24,11 +24,13 @@ namespace ciklonalozi
         public static IServiceCollection ConfigureAuth(this IServiceCollection services, IConfiguration configuration)
         {
             var auth = configuration.GetSection("Auth").Get<AuthSettings>();
+            if (auth == null)
+                throw new Exception("Enable auth");
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(opt =>
                {
-                   opt.Cookie.Name = auth.CookieName;
+                   opt.Cookie.Name = auth?.CookieName;
                    opt.AccessDeniedPath = new("/Denied");
                })
                .AddGitHub(opt =>
