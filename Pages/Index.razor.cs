@@ -112,6 +112,8 @@ namespace ciklonalozi.Pages
         }
         string GetStatusRowClass(Order order)
         {
+            if (order.Returned.HasValue) 
+                return "table-secondary";
             if (order.Removed)
                 return "text-decoration-line-through";
             if (order.Arrival.Date < Today && !order.Arrived.HasValue)

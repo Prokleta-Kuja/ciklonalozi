@@ -1,0 +1,18 @@
+.logo-header{
+    width: 40px;
+    height: 40px;
+    margin-right: auto;
+}
+.status-header{
+    margin-left: auto;
+}
+.footer-wo-width{
+    min-width: 25%;
+}
+.footer-logo{
+    width: 50px;
+    height: auto;
+}
+.test{
+    background-color: red;
+}

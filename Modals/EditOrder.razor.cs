@@ -39,7 +39,7 @@ namespace ciklonalozi.Modals
             Model.Removed = order.Removed;
 
             PushTitle = "Servis završen";
-            PushBody = "Možete preuzeti svoj bicikl";
+            PushBody = "Vaš bicikl je spreman za preuzimanje.";
 
             // Update original if changed in the meantime
             using var db = DbFactory.CreateDbContext();
