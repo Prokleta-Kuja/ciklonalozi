@@ -2,8 +2,8 @@
 
 <div class="mb-3" @onclick:stopPropagation>
     <label for="@For" class="form-label">
-        @Label @(Required ? "*":"") 
-        @if(_local.HasValue)
+        @Label @(Required ? "*" : "")
+        @if (_local.HasValue)
         {
             <span class="form-text"> (@_ci.DateTimeFormat.GetDayName(_local.Value.DayOfWeek))</span>
         }
@@ -11,10 +11,11 @@
     <div class="input-group @_errorClass">
         <button class="btn btn-outline-primary" title="Prethodni dan" type=button @onclick=PrevDay>&lt;</button>
         <button class="btn btn-outline-primary" title="Idući dan" type=button @onclick=NextDay>&gt;</button>
-        <input type="datetime" class="form-control @_errorClass" id="@For" placeholder=@PlaceHolder
-            @bind=_local @onblur=Update @bind:culture=_ci required=@Required @ref=Input>
-        <button class="btn btn-outline-secondary" title="Sad" type="button" @onclick=Today><i class="bi bi-calendar-check"></i></button>
-        @if(_local.HasValue)
+        <input type="datetime" class="form-control @_errorClass" id="@For" placeholder=@PlaceHolder @bind=_local
+            @onblur=Update @bind:culture=_ci required=@Required @ref=Input>
+        <button class="btn btn-outline-secondary" title="Sad" type="button" @onclick=Today><i
+                class="bi bi-calendar-check"></i></button>
+        @if (_local.HasValue)
         {
             <button class="btn btn-outline-danger" title="Očisti" type="button" @onclick=Clear>⨉</button>
         }
@@ -27,7 +28,7 @@
     }
 </div>
 
-@code{
+@code {
     const string DEFAULT_LOCALE = "hr-HR";
     const string DEFAULT_TZ = "Europe/Zagreb";
     private bool _isError => Errors != null && Errors.ContainsKey(For);
@@ -49,7 +50,7 @@
     [Parameter] public bool AutoFocus { get; set; }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender && AutoFocus)
+        if (firstRender && AutoFocus)
             await Input.FocusAsync();
     }
     protected override void OnInitialized()
@@ -60,9 +61,9 @@
         catch (Exception) { _tz = TimeZoneInfo.FindSystemTimeZoneById(DEFAULT_TZ); }
 
         if (Value.HasValue)
-            _local = TimeZoneInfo.ConvertTimeFromUtc(Value.Value,_tz);
+            _local = TimeZoneInfo.ConvertTimeFromUtc(Value.Value, _tz);
     }
-    
+
     private async Task Update()
     {
         if (_isError)
@@ -75,26 +76,27 @@
             await ValueChanged.InvokeAsync(null);
         else
         {
-            var dt = TimeZoneInfo.ConvertTimeToUtc(_local.Value,_tz);
+            var dt = TimeZoneInfo.ConvertTimeToUtc(_local.Value, _tz);
             await ValueChanged.InvokeAsync(dt);
         }
 
-        if(AfterChange.HasDelegate)
+        if (AfterChange.HasDelegate)
             await AfterChange.InvokeAsync();
     }
     private async Task Clear()
     {
         _local = null;
         await Update();
-    } 
-    private async Task Today() 
+    }
+    private async Task Today()
     {
         _local = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _tz);
+        _local = new DateTime(_local.Value.Year, _local.Value.Month, _local.Value.Day, 9, 0, 0);
         await Update();
     }
     private async Task Move(int days)
     {
-        if(!_local.HasValue)
+        if (!_local.HasValue)
             _local = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _tz);
 
         _local = _local.Value.AddDays(days);

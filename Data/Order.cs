@@ -37,5 +37,8 @@ namespace ciklonalozi.Data
         public string? Endpoint { get; set; }
         public string? P256DH { get; set; }
         public string? Auth { get; set; }
+
+        // display
+        public string IsReverse => OrderId % 2 == 0 ? "flex-row-reverse" : string.Empty;
     }
 }

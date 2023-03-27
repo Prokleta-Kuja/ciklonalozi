@@ -25,7 +25,14 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 
-<body>
+<body class="container-sm">
+
+    @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
+    <div id=denied class="d-none" role="alert">
+        Slanje obavijesti je blokirano na Vašem uređaju. Ako se odlučite primati obavijesti, omogućite slanje obavijesti
+        u svom pregledniku i probajte ponovo.
+    </div>
+
     @if (Model.Fail)
     {
         @* Upisan je neispravan nalog *@
@@ -45,13 +52,16 @@
     else
     {
         @* Tu je sve ok i koristi Model.Order po uzoru na Print.cshtml *@
-        
+
         if (Model.Order.Returned.HasValue)
         {
             <div class="p-2 d-flex flex-row flex-wrap justify-content-between align-items-center bg-black">
-                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo"/>
+                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo" />
                 <h1 class="text-center fs-4 m-0">Radni nalog br.: @Model.Order.OrderId</h1>
-                <div class="d-flex flex-nowrap flex-row align-items-center status-header"><h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button" class="btn btn-info fs-6 text-white">ZATVORENO</button></div>
+                <div class="d-flex flex-nowrap flex-row align-items-center status-header">
+                    <h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button"
+                        class="btn btn-info fs-6 text-white">ZATVORENO</button>
+                </div>
             </div>
 
             <div class="m-3">
@@ -60,9 +70,9 @@
 
             <div class="ms-5 me-5">
                 <p>Predmet "@Model.Order.Subject" je preuzet sa servisa dana: @Model.Order.Returned sati.</p>
-                    
+
                 <p>Odrađeni su radovi: "@Model.Order.Description" s danom @Model.Order.Completed sati.</p>
-                
+
                 @if (Model.Order.RealPrice.HasValue)
                 {
                     <p>Plaćen iznos radova: @Model.Order.RealPrice €</p>
@@ -78,9 +88,12 @@
         else if (Model.Order.Completed.HasValue)
         {
             <div class="p-2 d-flex flex-row flex-wrap justify-content-between align-items-center bg-black">
-                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo"/>
+                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo" />
                 <h1 class="text-center fs-4 m-0">Radni nalog br.: @Model.Order.OrderId</h1>
-            <div class="d-flex flex-nowrap flex-row align-items-center status-header"><h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button" class="btn btn-success fs-6 text-white">ZAVRŠENO</button></div>
+                <div class="d-flex flex-nowrap flex-row align-items-center status-header">
+                    <h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button"
+                        class="btn btn-success fs-6 text-white">ZAVRŠENO</button>
+                </div>
             </div>
 
             <div class="m-3">
@@ -88,8 +101,9 @@
             </div>
 
             <div class="ms-5 me-5">
-                <p>Dogovoreni radovi ("@Model.Order.Description") na predmetu "@Model.Order.Subject" su uspješno završeni @Model.Order.Completed sati.</p>
-                
+                <p>Dogovoreni radovi ("@Model.Order.Description") na predmetu "@Model.Order.Subject" su uspješno završeni
+                    @Model.Order.Completed sati.</p>
+
                 @if (Model.Order.RealPrice.HasValue)
                 {
                     <p>Konačan iznos radova: @Model.Order.RealPrice €</p>
@@ -105,9 +119,12 @@
         else if (Model.Order.Arrived.HasValue)
         {
             <div class="p-2 d-flex flex-row flex-wrap justify-content-between align-items-center bg-black">
-                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo"/>
+                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo" />
                 <h1 class="text-center fs-4 m-0">Radni nalog br.: @Model.Order.OrderId</h1>
-                <div class="d-flex flex-nowrap flex-row align-items-center status-header"><h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button" class="btn btn-warning fs-6 text-white">ZAPRIMLJENO - U RADU</button></div>
+                <div class="d-flex flex-nowrap flex-row align-items-center status-header">
+                    <h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button"
+                        class="btn btn-warning fs-6 text-white">ZAPRIMLJENO - U RADU</button>
+                </div>
             </div>
 
             <div class="m-3">
@@ -132,17 +149,21 @@
         else
         {
             <div class="p-2 d-flex flex-row flex-wrap justify-content-between align-items-center bg-black">
-                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo"/>
+                <img class="logo-header" src="/images/cs-logo-white.svg" alt="Logo" />
                 <h1 class="text-center fs-4 m-0">Radni nalog br.: @Model.Order.OrderId</h1>
-                <div class="d-flex flex-nowrap flex-row align-items-center status-header"><h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button" class="btn btn-danger fs-6">NIJE ZAPRIMLJENO</button></div>
+                <div class="d-flex flex-nowrap flex-row align-items-center status-header">
+                    <h2 class="fs-6 pe-2 m-0">STATUS:</h2><button type="button" class="btn btn-danger fs-6">NIJE
+                        ZAPRIMLJENO</button>
+                </div>
             </div>
-            
+
             <div class="m-3">
                 <h1>Pozdrav @Model.Order.ContactName,</h1>
             </div>
-            
+
             <div class="ms-5 me-5">
-                <p>Vaš predmet "@Model.Order.Subject" još nije preuzet na servis. Dogovoreno vrijeme i datum preuzimanja je najkasnije do: @Model.Order.Arrival.AddHours(-6) sati.</p>
+                <p>Vaš predmet "@Model.Order.Subject" još nije preuzet na servis. Dogovoreno vrijeme i datum preuzimanja je
+                    najkasnije do: @Model.Order.Arrival.AddHours(-6) sati.</p>
                 <p>Dogovoreni radovi koji će se obavljati: @Model.Order.Description</p>
 
                 @if (Model.Order.EstimatedPrice.HasValue)
@@ -154,60 +175,57 @@
             </div>
         }
 
-            <hr class="m-0">
-            <div class="m-1">
-                <div class="d-lg-flex flex-row flex-wrap flex-lg-nowrap align-items-center justify-content-around">
-                    <div class="text-secondary d-flex flex-column justify-content-between p-2 footer-wo-width">
-                        <div class="d-flex flex-row justify-content-between"><h3>Radno vrijeme:</h3></div>
-                        <div class="d-flex flex-row justify-content-between"><p>Ponedjeljak - Petak:</p><p>08:00 - 20:00</p></div>
-                        <div class="d-flex flex-row justify-content-between"><p>Subotom:</p><p>09:00 - 14:00</p></div>
-                        <div class="d-flex flex-row justify-content-between"><p>Nedjeljom i blagdanima:</p><p>Zatvoreno</p></div>
+        <hr class="m-0">
+        <div class="m-1">
+            <div class="d-lg-flex flex-row flex-wrap flex-lg-nowrap align-items-center justify-content-around">
+                <div class="text-secondary d-flex flex-column justify-content-between p-2 footer-wo-width">
+                    <div class="d-flex flex-row justify-content-between">
+                        <h3>Radno vrijeme:</h3>
                     </div>
-                    <div class="p-2">
-                        <p class="text-secondary text-center">Podržite nas i na društvenim mrežama:</p>
-                        <div class="d-flex flex-row align-items-center justify-content-around">
-                            <div class="ms-3">
-                                <a class="rounded text-secondary"
-                                    href="https://www.facebook.com/ciklosport"
-                                    role="button"
-                                    target="_blank"
-                                    ><i class="bi bi-facebook fs-3"></i>
-                                </a>
-                            </div>
-                            <div class="ms-3">
-                                <a
-                                class="rounded text-secondary"
-                                href="https://www.instagram.com/ciklosport/"
-                                role="button"
-                                target="_blank"
-                                ><i class="bi bi-instagram fs-3"></i>
-                                </a>
-                            </div>
-                            <div class="ms-3">
-                                <a
-                                class="rounded text-secondary"
-                                href="https://twitter.com/ciklo_sport/"
-                                role="button"
-                                target="_blank"
-                                ><i class="bi bi-twitter fs-3"></i>
-                                </a>
-                            </div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <p>Ponedjeljak - Petak:</p>
+                        <p>08:00 - 20:00</p>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <p>Subotom:</p>
+                        <p>09:00 - 14:00</p>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <p>Nedjeljom i blagdanima:</p>
+                        <p>Zatvoreno</p>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <p class="text-secondary text-center">Podržite nas i na društvenim mrežama:</p>
+                    <div class="d-flex flex-row align-items-center justify-content-around">
+                        <div class="ms-3">
+                            <a class="rounded text-secondary" href="https://www.facebook.com/ciklosport" role="button"
+                                target="_blank"><i class="bi bi-facebook fs-3"></i>
+                            </a>
                         </div>
-                    </div>
-                    <div class="p-2">
-                        <p class="text-secondary text-center">Posjetite i našu web stranicu: <a href="https://ciklo-sport.hr/" target="_blank">ciklo-sport.hr</a></p>
-                        <div class="text-center">
-                            <a href="https://ciklo-sport.hr/" target="_blank"><img class="footer-logo" src="/images/cs-300.png" alt="Ciklo-Sport"/></a>
+                        <div class="ms-3">
+                            <a class="rounded text-secondary" href="https://www.instagram.com/ciklosport/" role="button"
+                                target="_blank"><i class="bi bi-instagram fs-3"></i>
+                            </a>
+                        </div>
+                        <div class="ms-3">
+                            <a class="rounded text-secondary" href="https://twitter.com/ciklo_sport/" role="button"
+                                target="_blank"><i class="bi bi-twitter fs-3"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
+                <div class="p-2">
+                    <p class="text-secondary text-center">Posjetite i našu web stranicu: <a href="https://ciklo-sport.hr/"
+                            target="_blank">ciklo-sport.hr</a></p>
+                    <div class="text-center">
+                        <a href="https://ciklo-sport.hr/" target="_blank"><img class="footer-logo" src="/images/cs-300.png"
+                                alt="Ciklo-Sport" /></a>
+                    </div>
+                </div>
             </div>
+        </div>
     }
-
-    @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
-    <div id=denied class="d-none">
-        Slanje obavijesti je blokirano na Vašem uređaju. Ako se odlučite primati obavijesti, omogućite slanje obavijesti u svom pregledniku i probajte ponovo.
-    </div>
 
     @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti ali ne za ovaj nalog *@
     <div id=granted class="d-none">
@@ -227,7 +245,8 @@
 
     @* Ovo se prikazuje kada nešto ode u klinac. Bitno je da korisnik zna da neće dobiti obavijest *@
     <div id=error class="d-none">
-        Nažalost Vas nismo mogli zabilježiti za primanje obavijesti. Probajte ponovo kasnije, a ako i dalje ne radi nas informirajte kako bi mogli istražiti.
+        Nažalost Vas nismo mogli zabilježiti za primanje obavijesti. Probajte ponovo kasnije, a ako i dalje ne radi nas
+        informirajte kako bi mogli istražiti.
     </div>
 
     @* Ovo ne diraj *@
@@ -275,7 +294,7 @@
                     document.getElementById('granted').className = "d-block";
             }
             else if (Notification.permission == 'denied') {
-                document.getElementById('denied').className = "d-block";
+                document.getElementById('denied').className = "d-block alert alert-danger";
             }
             else {
                 document.getElementById('default').className = "d-block";

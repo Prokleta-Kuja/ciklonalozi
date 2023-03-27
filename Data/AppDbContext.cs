@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -42,6 +43,24 @@ namespace ciklonalozi.Data
                 foreach (var property in spanProperties)
                     builder.Entity(entityType.Name).Property(property.Name).HasConversion<long>();
             }
+        }
+
+        internal async Task DemoDataAsync()
+        {
+            var now = DateTime.UtcNow;
+            Orders.Add(new("Jučer", null, "Subjekt a", now)
+            {
+                Arrived = now.AddMinutes(5),
+                Removed = true,
+            });
+            Orders.Add(new("Danas", null, "Subjekt b", now)
+            {
+                Arrived = now.AddMinutes(5),
+            });
+
+            // TODO: dodaj još
+
+            await SaveChangesAsync();
         }
     }
 }

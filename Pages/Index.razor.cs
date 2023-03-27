@@ -104,18 +104,19 @@ namespace ciklonalozi.Pages
 
             return printDt.ToString(format);
         }
-        string Display(Decimal? num){
-            if(num.HasValue)
-            return num.Value.ToString("#,##0.00");
+        string Display(Decimal? num)
+        {
+            if (num.HasValue)
+                return num.Value.ToString("#,##0.00");
             else
-            return "-";
+                return "-";
         }
         string GetStatusRowClass(Order order)
         {
-            if (order.Returned.HasValue) 
-                return "table-secondary";
             if (order.Removed)
                 return "text-decoration-line-through";
+            if (order.Returned.HasValue)
+                return "table-secondary";
             if (order.Arrival.Date < Today && !order.Arrived.HasValue)
                 return "table-danger";
             if (order.Arrival.Date == Today && !order.Arrived.HasValue)
@@ -126,6 +127,25 @@ namespace ciklonalozi.Pages
                 return "table-warning";
             if (order.Completed.HasValue)
                 return "table-success";
+
+            return string.Empty;
+        }
+        string GetStatusTitle(Order order)
+        {
+            if (order.Removed)
+                return "Brisano";
+            if (order.Returned.HasValue)
+                return "Vraćeno";
+            if (order.Arrival.Date < Today && !order.Arrived.HasValue)
+                return "Nije došao";
+            if (order.Arrival.Date == Today && !order.Arrived.HasValue)
+                return "Danas dolazi";
+            if (order.Arrived.HasValue && order.Arrived.Value.Date < Yesterday && !order.Completed.HasValue)
+                return "Nije stiglo";
+            if (order.Arrived.HasValue && !order.Completed.HasValue)
+                return "Nije završeno";
+            if (order.Completed.HasValue)
+                return "Završeno";
 
             return string.Empty;
         }

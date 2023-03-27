@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace ciklonalozi
     {
         public static async Task Main(string[] args)
         {
-            await C.Vapid.LoadAsync();
             await InitializeDb(args);
+            await C.Vapid.LoadAsync();
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -36,6 +37,12 @@ namespace ciklonalozi
                 await db.Database.MigrateAsync();
             else
                 await db.Database.EnsureCreatedAsync();
+            if (Debugger.IsAttached)
+            {
+                var hasData = await db.Orders.AnyAsync();
+                if (!hasData)
+                    await db.DemoDataAsync();
+            }
         }
     }
 }
