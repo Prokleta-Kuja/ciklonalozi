@@ -25,13 +25,7 @@
     <meta name="theme-color" content="#ffffff">
 </head>
 
-<body class="container-sm">
-
-    @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
-    <div id=denied class="d-none" role="alert">
-        Slanje obavijesti je blokirano na Vašem uređaju. Ako se odlučite primati obavijesti, omogućite slanje obavijesti
-        u svom pregledniku i probajte ponovo.
-    </div>
+<body>
 
     @if (Model.Fail)
     {
@@ -63,26 +57,26 @@
                         class="btn btn-info fs-6 text-white">ZATVORENO</button>
                 </div>
             </div>
+            <div class="container-sm">
+                <div class="m-3">
+                    <h1>Pozdrav @Model.Order.ContactName,</h1>
+                </div>
 
-            <div class="m-3">
-                <h1>Pozdrav @Model.Order.ContactName,</h1>
+                <div class="ms-5 me-5">
+                    <p>Predmet "@Model.Order.Subject" je preuzet sa servisa dana: @Model.Order.Returned sati.</p>
+
+                    <p>Odrađeni su radovi: "@Model.Order.Description" s danom @Model.Order.Completed sati.</p>
+
+                    @if (Model.Order.RealPrice.HasValue)
+                    {
+                        <p>Plaćen iznos radova: @Model.Order.RealPrice €</p>
+                    }
+
+                    <p>Hvala Vam na podršci.</p>
+
+                    <p>Želimo Vam ugodnu vožnju i puno sretnih kilometara!</p>
+                </div>
             </div>
-
-            <div class="ms-5 me-5">
-                <p>Predmet "@Model.Order.Subject" je preuzet sa servisa dana: @Model.Order.Returned sati.</p>
-
-                <p>Odrađeni su radovi: "@Model.Order.Description" s danom @Model.Order.Completed sati.</p>
-
-                @if (Model.Order.RealPrice.HasValue)
-                {
-                    <p>Plaćen iznos radova: @Model.Order.RealPrice €</p>
-                }
-
-                <p>Hvala Vam na podršci.</p>
-
-                <p>Želimo Vam ugodnu vožnju i puno sretnih kilometara!</p>
-            </div>
-
         }
 
         else if (Model.Order.Completed.HasValue)
@@ -95,25 +89,25 @@
                         class="btn btn-success fs-6 text-white">ZAVRŠENO</button>
                 </div>
             </div>
+            <div class="container-sm">
+                <div class="m-3">
+                    <h1>Pozdrav @Model.Order.ContactName,</h1>
+                </div>
 
-            <div class="m-3">
-                <h1>Pozdrav @Model.Order.ContactName,</h1>
+                <div class="ms-5 me-5">
+                    <p>Dogovoreni radovi ("@Model.Order.Description") na predmetu "@Model.Order.Subject" su uspješno završeni
+                        @Model.Order.Completed sati.</p>
+
+                    @if (Model.Order.RealPrice.HasValue)
+                    {
+                        <p>Konačan iznos radova: @Model.Order.RealPrice €</p>
+                    }
+
+                    <p>Možete doći po bicikl.</p>
+
+                    <p>Zahvaljujemo Vam na ukazanom povjerenju.</p>
+                </div>
             </div>
-
-            <div class="ms-5 me-5">
-                <p>Dogovoreni radovi ("@Model.Order.Description") na predmetu "@Model.Order.Subject" su uspješno završeni
-                    @Model.Order.Completed sati.</p>
-
-                @if (Model.Order.RealPrice.HasValue)
-                {
-                    <p>Konačan iznos radova: @Model.Order.RealPrice €</p>
-                }
-
-                <p>Možete doći po bicikl.</p>
-
-                <p>Zahvaljujemo Vam na ukazanom povjerenju.</p>
-            </div>
-
         }
 
         else if (Model.Order.Arrived.HasValue)
@@ -126,23 +120,22 @@
                         class="btn btn-warning fs-6 text-white">ZAPRIMLJENO - U RADU</button>
                 </div>
             </div>
+            <div class="container-sm">
+                    <h1>Pozdrav @Model.Order.ContactName,</h1>
 
-            <div class="m-3">
-                <h1>Pozdrav @Model.Order.ContactName,</h1>
-            </div>
+                <div class="ms-2 me-2">
+                    <p>Predmet "@Model.Order.Subject" je dostavljen @Model.Order.Arrived sati te je u procesu servisiranja.</p>
+                    <p>Dogovoreni radovi: @Model.Order.Description</p>
 
-            <div class="ms-5 me-5">
-                <p>Predmet "@Model.Order.Subject" je dostavljen @Model.Order.Arrived sati te je u procesu servisiranja.</p>
-                <p>Dogovoreni radovi: @Model.Order.Description</p>
+                    @if (Model.Order.EstimatedPrice.HasValue)
+                    {
+                        <p>Okvirna procjena iznosa radova: ~ @Model.Order.EstimatedPrice €</p>
+                    }
 
-                @if (Model.Order.EstimatedPrice.HasValue)
-                {
-                    <p>Okvirna procjena iznosa radova: ~ @Model.Order.EstimatedPrice €</p>
-                }
+                    <p>Procijenjeno vrijeme završetka radova: @Model.Order.Arrival.AddHours(1) sati.</p>
 
-                <p>Procijenjeno vrijeme završetka radova: @Model.Order.Arrival.AddHours(1) sati.</p>
-
-                <p>Provjerite status naloga ponovo kasnije.</p>
+                    <p>Provjerite status naloga ponovo kasnije.</p>
+                </div>
             </div>
         }
 
@@ -156,24 +149,60 @@
                         ZAPRIMLJENO</button>
                 </div>
             </div>
+            <div class="container-sm">
+                <div class="m-3">
+                    <h1>Pozdrav @Model.Order.ContactName,</h1>
+                </div>
 
-            <div class="m-3">
-                <h1>Pozdrav @Model.Order.ContactName,</h1>
-            </div>
+                <div class="ms-5 me-5">
+                    <p>Vaš predmet "@Model.Order.Subject" još nije preuzet na servis. Dogovoreno vrijeme i datum preuzimanja je
+                        najkasnije do: @Model.Order.Arrival.AddHours(-6) sati.</p>
+                    <p>Dogovoreni radovi koji će se obavljati: @Model.Order.Description</p>
 
-            <div class="ms-5 me-5">
-                <p>Vaš predmet "@Model.Order.Subject" još nije preuzet na servis. Dogovoreno vrijeme i datum preuzimanja je
-                    najkasnije do: @Model.Order.Arrival.AddHours(-6) sati.</p>
-                <p>Dogovoreni radovi koji će se obavljati: @Model.Order.Description</p>
+                    @if (Model.Order.EstimatedPrice.HasValue)
+                    {
+                        <p>Okvirna procjena iznosa radova: ~ @Model.Order.EstimatedPrice €</p>
+                    }
 
-                @if (Model.Order.EstimatedPrice.HasValue)
-                {
-                    <p>Okvirna procjena iznosa radova: ~ @Model.Order.EstimatedPrice €</p>
-                }
-
-                <p>Hvala Vam na ukazanom povjerenju i vidimo se uskoro!</p>
+                    <p>Hvala Vam na ukazanom povjerenju i vidimo se uskoro!</p>
+                </div>
             </div>
         }
+
+        <div class="container-sm">
+            @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
+            <div id=denied class="d-none" role="alert">
+                <p>Slanje obavijesti je blokirano na Vašem uređaju. Ako se odlučite primati obavijesti, omogućite slanje obavijesti
+                   u svom pregledniku i probajte ponovo (ponovno učitajte stranicu).</p>
+            </div>
+    
+            @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti ali ne za ovaj nalog *@
+            <div id=granted class="d-none" role="alert">
+                <p>Obavijesti možete primati i za više naloga/predmeta.</p>
+                <button class="btn btn-info" onclick="subscribe()">Primajte obavijesti i za ovaj servis</button>
+            </div>
+    
+            @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti za ovaj nalog *@
+            <div id=granted-subscribed class="d-none" role="alert">
+                <p>Primiti ćete obavijest kada radovi budu završeni.</p>
+                <button class="btn btn-success" onclick="unsubscribe()">Otkaži</button>
+            </div>
+    
+            @* Ovo se prikazuje ako možemo pitati da li želi primanje obavijesti *@
+            <div id=default class="d-none" role="alert">
+                <p>Primite obavijest o završetku radova na svoj uređaj.</p>
+                <div class="d-flex flex-row flex-wrap flex-lg-nowrap align-items-center justify-content-around">
+                    <button class="btn btn-info" onclick="subscribe()">Primite obavijest o završetku radova.</button>
+                    <p class="fs7 ms-3">*Ovo je beta verzija i ovisi o raznim faktorima koji određuju uspješnost ove funkcije. Postoji mogućnost da na Vašem uređaju ova opcija neće raditi stoga savjetujemo ručnu provjeru ponovnom posjetom na ovu stranicu u procijenjeno vrijeme završetka.</p>
+                </div>
+            </div>
+    
+            @* Ovo se prikazuje kada nešto ode u klinac. Bitno je da korisnik zna da neće dobiti obavijest *@
+            <div id=error class="d-none" role="alert">
+                <p>Nažalost Vas nismo mogli zabilježiti za primanje obavijesti. Probajte ponovo kasnije, a ako i dalje ne radi nas
+                informirajte kako bi mogli istražiti.</p>
+            </div>
+        </div>
 
         <hr class="m-0">
         <div class="m-1">
@@ -198,18 +227,18 @@
                 <div class="p-2">
                     <p class="text-secondary text-center">Podržite nas i na društvenim mrežama:</p>
                     <div class="d-flex flex-row align-items-center justify-content-around">
-                        <div class="ms-3">
-                            <a class="rounded text-secondary" href="https://www.facebook.com/ciklosport" role="button"
+                        <div class="zoom">
+                            <a class="rounded icn-fb" href="https://www.facebook.com/ciklosport" role="button"
                                 target="_blank"><i class="bi bi-facebook fs-3"></i>
                             </a>
                         </div>
-                        <div class="ms-3">
-                            <a class="rounded text-secondary" href="https://www.instagram.com/ciklosport/" role="button"
+                        <div class="zoom">
+                            <a class="rounded icn-ig" href="https://www.instagram.com/ciklosport/" role="button"
                                 target="_blank"><i class="bi bi-instagram fs-3"></i>
                             </a>
                         </div>
-                        <div class="ms-3">
-                            <a class="rounded text-secondary" href="https://twitter.com/ciklo_sport/" role="button"
+                        <div class="zoom">
+                            <a class="rounded icn-tw" href="https://twitter.com/ciklo_sport/" role="button"
                                 target="_blank"><i class="bi bi-twitter fs-3"></i>
                             </a>
                         </div>
@@ -218,36 +247,16 @@
                 <div class="p-2">
                     <p class="text-secondary text-center">Posjetite i našu web stranicu: <a href="https://ciklo-sport.hr/"
                             target="_blank">ciklo-sport.hr</a></p>
-                    <div class="text-center">
+                    <div class="text-center zoom">
                         <a href="https://ciklo-sport.hr/" target="_blank"><img class="footer-logo" src="/images/cs-300.png"
                                 alt="Ciklo-Sport" /></a>
                     </div>
                 </div>
             </div>
         </div>
+        @* <p class="text-secondary text-center">Powered by: <img src="/images/ica-logo.svg" alt="ica-logo" style="height:16px; width:auto;"/><a href="https://ica.hr/">ica.hr</a></p> *@
     }
 
-    @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti ali ne za ovaj nalog *@
-    <div id=granted class="d-none">
-        <button onclick="subscribe()">Primajte obavijesti i za ovaj servis</button>
-    </div>
-
-    @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti za ovaj nalog *@
-    <div id=granted-subscribed class="d-none">
-        Primiti ćete obavijest kada servis bude završen.
-        <button onclick="unsubscribe()">Otkaži</button>
-    </div>
-
-    @* Ovo se prikazuje ako možemo pitati da li želi primanje obavijesti *@
-    <div id=default class="d-none">
-        <button class="btn btn-success" onclick="subscribe()">Primite obavijest kada servis bude završen.</button>
-    </div>
-
-    @* Ovo se prikazuje kada nešto ode u klinac. Bitno je da korisnik zna da neće dobiti obavijest *@
-    <div id=error class="d-none">
-        Nažalost Vas nismo mogli zabilježiti za primanje obavijesti. Probajte ponovo kasnije, a ako i dalje ne radi nas
-        informirajte kako bi mogli istražiti.
-    </div>
 
     @* Ovo ne diraj *@
     <form id=subform action="" method="post" class=d-none>
@@ -289,15 +298,15 @@
 
             if (Notification.permission == 'granted') {
                 if (subscribed)
-                    document.getElementById('granted-subscribed').className = "d-block";
+                    document.getElementById('granted-subscribed').className = "d-block alert alert-dark";
                 else
-                    document.getElementById('granted').className = "d-block";
+                    document.getElementById('granted').className = "d-block alert alert-info";
             }
             else if (Notification.permission == 'denied') {
-                document.getElementById('denied').className = "d-block alert alert-danger";
+                document.getElementById('denied').className = "d-block alert alert-warning";
             }
             else {
-                document.getElementById('default').className = "d-block";
+                document.getElementById('default').className = "d-block alert alert-info";
             }
         })();
 
@@ -313,7 +322,7 @@
             }
             else {
                 subscribe();
-                document.getElementById('error').className = "d-block";
+                document.getElementById('error').className = "d-block alert alert-danger";
             }
         }
 
