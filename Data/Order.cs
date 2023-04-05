@@ -40,5 +40,6 @@ namespace ciklonalozi.Data
 
         // display
         public string IsReverse => OrderId % 2 == 0 ? "flex-row-reverse" : string.Empty;
+        public string IsLeft => OrderId % 2 == 0 ? "text-left" : string.Empty;
     }
 }

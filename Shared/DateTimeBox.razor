@@ -91,7 +91,7 @@
     private async Task Today()
     {
         _local = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _tz);
-        _local = new DateTime(_local.Value.Year, _local.Value.Month, _local.Value.Day, 9, 0, 0);
+        _local = new DateTime(_local.Value.Year, _local.Value.Month, _local.Value.Day, _local.Value.Hour, _local.Value.Minute, _local.Value.Second);
         await Update();
     }
     private async Task Move(int days)

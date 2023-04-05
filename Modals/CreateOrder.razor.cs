@@ -62,7 +62,7 @@ namespace ciklonalozi.Modals
 
             var order = new Order(Model.ContactName!, Model.ContactPhone, Model.Subject!, Model.ArrivalOrArrived!.Value);
             if (!Model.IsArrival)
-                order.Arrived = Model.ArrivalOrArrived.Value;
+                order.Arrived = DateTime.UtcNow;
 
             order.Description = Model.Description;
             order.EstimatedPrice = Model.EstimatedPrice;
