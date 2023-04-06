@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ namespace ciklonalozi
 {
     public static class C
     {
+        public static readonly TimeZoneInfo TZ = TimeZoneInfo.FindSystemTimeZoneById("Europe/Zagreb");
+        public static readonly CultureInfo CI = CultureInfo.GetCultureInfo("hr-HR");
         public static class Hasher
         {
             public static readonly Hashids Ids = new(Env.SALT, 4, Env.ALPHABET);

@@ -1,4 +1,5 @@
 @page "{id:int}"
+@using ciklonalozi
 @using ciklonalozi.Pages
 @model Print
 
@@ -91,10 +92,6 @@
         {
             <p style="text-align: right; font-size: 8px;">Okvirna procjena iznosa radova: ~@Model.Order.EstimatedPrice €</p>
         }
-        else
-        {
-
-        }
 
         <hr />
 
@@ -102,7 +99,7 @@
             <div>@* Datum dolaska, može biti prazno ako je samo najava u pitanju *@
                 @if (Model.Order.Arrived.HasValue)
                 {
-                    <p class="print-p">Zaprimljeno: @Model.Order.Arrived</p>
+                    <p class="print-p">Zaprimljeno: @Model.Order.Arrived.Value.ToString("g", C.CI)</p>
                 }
                 else
                 {
@@ -110,7 +107,7 @@
                 }
             </div>
             <div>
-                <p class="print-p">Procjena završetka: @Model.Order.Arrival.Date.AddHours(19)</p>
+                <p class="print-p">Procjena završetka: @Model.Order.Arrival.Date.AddHours(19).ToString("g", C.CI)</p>
             </div>
         </div>
 
@@ -198,10 +195,6 @@
         {
             <p style="text-align: right; font-size: 8px;">Okvirna procjena iznosa radova: ~@Model.Order.EstimatedPrice €</p>
         }
-        else
-        {
-
-        }
 
         <hr />
 
@@ -209,7 +202,7 @@
             <div>@* Datum dolaska, može biti prazno ako je samo najava u pitanju *@
                 @if (Model.Order.Arrived.HasValue)
                 {
-                    <p class="print-p">Zaprimljeno: @Model.Order.Arrived</p>
+                    <p class="print-p">Zaprimljeno: @Model.Order.Arrived.Value.ToString("g", C.CI)</p>
                 }
                 else
                 {
@@ -217,7 +210,7 @@
                 }
             </div>
             <div>
-                <p class="print-p">Procjena završetka: @Model.Order.Arrival.Date.AddHours(19)</p>
+                <p class="print-p">Procjena završetka: @Model.Order.Arrival.Date.AddHours(19).ToString("g", C.CI)</p>
             </div>
         </div>
 
