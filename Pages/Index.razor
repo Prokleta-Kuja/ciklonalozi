@@ -17,21 +17,21 @@
 <hr>
 
 <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover table-sm">
         <thead>
             <tr>
                 <th></th>
-                <th>#</th>
+                <th class="text-end">#</th>
                 <th>Kontakt</th>
                 <th>Predmet</th>
                 <th>Opis</th>
                 <th>Zaprimljeno</th>
                 <th>Završeno</th>
                 <th>Vraćeno</th>
-                <th>Cijena (€)</th>
+                <th class="text-end">Cijena (€)</th>
                 <th class="text-end">
                     <button class="btn btn-sm btn-primary" @onclick=AddClicked accesskey="n">
-                        <u>N</u>ovi nalog
+                        <b><u>N</u>ovi nalog</b>
                     </button>
                 </th>
             </tr>
@@ -39,12 +39,10 @@
         <tbody>
             @foreach (var date in Orders)
             {
-                <tr class="table-secondary">
-                    <td colspan=10>
-                        <h6 class="mb-0"><i>@Display(date.Key, false)</i> @CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek)
+                    <td colspan=10 class="p-1">
+                        <h6 class="mb-0 fs-6 text-capitalize"><i class="bi bi-calendar-event me-2"></i> @CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek) → @Display(date.Key, false)
                         </h6>
                     </td>
-                </tr>
                 @foreach (var order in date.Value)
                 {
                     <tr @key=order.OrderId class=@GetStatusRowClass(order) title=@GetStatusTitle(order)>
@@ -59,7 +57,7 @@
                                 <i class=@GetStatusIconClass(order)></i>
                             }
                         </td>
-                        <td>@order.OrderId.ToString("#,0")</td>
+                        <td class="text-end">@order.OrderId.ToString("#,0")</td>
                         <td>@order.ContactName</td>
                         <td>@order.Subject</td>
                         <td>@order.Description</td>

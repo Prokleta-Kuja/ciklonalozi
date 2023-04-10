@@ -114,13 +114,15 @@ namespace ciklonalozi.Pages
         string GetStatusRowClass(Order order)
         {
             if (order.Removed)
-                return "text-decoration-line-through";
+                return "text-decoration-line-through table-secondary";
             if (order.Returned.HasValue)
                 return "table-secondary";
             if (order.Arrival.Date < Today && !order.Arrived.HasValue)
-                return "table-danger";
+                return "table-secondary";
             if (order.Arrival.Date == Today && !order.Arrived.HasValue)
-                return "table-info";
+                return "table-secondary";
+            if (order.Arrival.Date > Today && !order.Arrived.HasValue)
+                return "table-secondary";
             if (order.Arrived.HasValue && order.Arrived.Value.Date < Yesterday && !order.Completed.HasValue)
                 return "table-danger";
             if (order.Arrived.HasValue && !order.Completed.HasValue)
@@ -133,17 +135,19 @@ namespace ciklonalozi.Pages
         string GetStatusTitle(Order order)
         {
             if (order.Removed)
-                return "Brisano";
+                return "Nije došao / odustao";
             if (order.Returned.HasValue)
                 return "Vraćeno";
             if (order.Arrival.Date < Today && !order.Arrived.HasValue)
                 return "Nije došao";
+            if (order.Arrival.Date > Today && !order.Arrived.HasValue)
+                return "U dolasku";
             if (order.Arrival.Date == Today && !order.Arrived.HasValue)
                 return "Danas dolazi";
             if (order.Arrived.HasValue && order.Arrived.Value.Date < Yesterday && !order.Completed.HasValue)
-                return "Nije stiglo";
-            if (order.Arrived.HasValue && !order.Completed.HasValue)
                 return "Nije završeno";
+            if (order.Arrived.HasValue && !order.Completed.HasValue)
+                return "U radu";
             if (order.Completed.HasValue)
                 return "Završeno";
 
