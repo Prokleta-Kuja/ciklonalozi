@@ -30,6 +30,17 @@ namespace ciklonalozi.Models
 
             if (!Arrival.HasValue)
                 errors.Add(nameof(Arrival), "Obavezno");
+            else if (Holidays.TryGetHoliday(Arrival.Value, out var arrivalHoliday))
+                errors.Add(nameof(Arrival), arrivalHoliday);
+
+            if (Arrived.HasValue && Holidays.TryGetHoliday(Arrived.Value, out var arrivedHoliday))
+                errors.Add(nameof(Arrived), arrivedHoliday);
+
+            if (Completed.HasValue && Holidays.TryGetHoliday(Completed.Value, out var completedHoliday))
+                errors.Add(nameof(Completed), completedHoliday);
+
+            if (Returned.HasValue && Holidays.TryGetHoliday(Returned.Value, out var returnedHoliday))
+                errors.Add(nameof(Returned), returnedHoliday);
 
             if (Completed.HasValue && !RealPrice.HasValue)
                 errors.Add(nameof(RealPrice), "Obavezno za zatvoreni nalog");

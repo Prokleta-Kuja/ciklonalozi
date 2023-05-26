@@ -26,6 +26,8 @@ namespace ciklonalozi.Models
 
             if (!ArrivalOrArrived.HasValue)
                 errors.Add(nameof(ArrivalOrArrived), "Obavezno");
+            else if (Holidays.TryGetHoliday(ArrivalOrArrived.Value, out var arrivalHoliday))
+                errors.Add(nameof(ArrivalOrArrived), arrivalHoliday);
 
             if (errors.Any())
                 return errors;
