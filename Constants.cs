@@ -35,6 +35,7 @@ namespace ciklonalozi
             public static string InvoiceFor(int id) => $"{Invoices}/{id}";
             public const string InvoicePrint = "/invoices/{Id:int}/print";
             public static string InvoicePrintFor(int id) => $"{Invoices}/{id}/print";
+            public const string Analysis = "/anal";
         }
         public static class Settings
         {
