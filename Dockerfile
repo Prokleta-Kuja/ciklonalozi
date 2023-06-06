@@ -1,16 +1,6 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
-
-COPY *.csproj ./
-RUN dotnet restore
-
-COPY . .
-WORKDIR /app
-RUN dotnet publish -c Release -o out --no-restore
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
-WORKDIR /app
-COPY --from=build /app/out ./
+COPY out ./
 
 ENV TZ="Europe/Zagreb" \
     ASPNETCORE_URLS=http://*:50505 \
