@@ -13,6 +13,7 @@ namespace ciklonalozi.Models
         public DateTime? ArrivalOrArrived { get; set; }
         public bool IsArrival { get; set; }
         public decimal? EstimatedPrice { get; set; }
+        public int? Effort { get; set; } = 20;
 
         public Dictionary<string, string>? Validate()
         {
@@ -28,6 +29,9 @@ namespace ciklonalozi.Models
                 errors.Add(nameof(ArrivalOrArrived), "Obavezno");
             else if (Holidays.TryGetHoliday(ArrivalOrArrived.Value, out var arrivalHoliday))
                 errors.Add(nameof(ArrivalOrArrived), arrivalHoliday);
+
+            if (!Effort.HasValue)
+                errors.Add(nameof(Effort), "Obavezno");
 
             if (errors.Any())
                 return errors;

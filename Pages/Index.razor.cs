@@ -19,6 +19,7 @@ namespace ciklonalozi.Pages
         DateTime Today { get; } = DateTime.UtcNow.Date;
         DateTime Yesterday { get; } = DateTime.UtcNow.AddDays(-1).Date;
         Dictionary<DateTime, List<Order>> Orders { get; set; } = new();
+        Dictionary<DateTime, int> Efforts { get; set; } = new();
         protected string? Query;
         protected ElementReference QueryElement;
         protected DateTime? From = DateTime.UtcNow.Date.AddDays(-1);
@@ -71,12 +72,17 @@ namespace ciklonalozi.Pages
             var results = await query.ToListAsync();
 
             Orders.Clear();
+            Efforts.Clear();
             foreach (var order in results)
             {
                 if (!Orders.ContainsKey(order.Arrival.Date))
+                {
                     Orders.Add(order.Arrival.Date, new());
+                    Efforts.Add(order.Arrival.Date, 0);
+                }
 
                 Orders[order.Arrival.Date].Add(order);
+                Efforts[order.Arrival.Date] += order.Effort;
             }
 
             StateHasChanged();
@@ -163,6 +169,23 @@ namespace ciklonalozi.Pages
                 return "bi bi-check-all";
 
             return "bi bi-tools";
+        }
+        static double GetEffortPercentage(int totalEffort)
+        {
+            var percentage = ((double)totalEffort / (double)C.MaxEffort) * 100;
+            if (percentage > 100)
+                percentage = 100;
+
+            return percentage;
+        }
+        static string GetEffortStyle(double percentage)
+        {
+            if (percentage < 60)
+                return $"width: {percentage}%; background-color: var(--bs-green);";
+            if (percentage < 80)
+                return $"width: {percentage}%; background-color: var(--bs-yellow);";
+
+            return $"width: {percentage}%; background-color:var(--bs-red);";
         }
     }
 }

@@ -12,6 +12,7 @@ namespace ciklonalozi
     {
         public static readonly TimeZoneInfo TZ = TimeZoneInfo.FindSystemTimeZoneById("Europe/Zagreb");
         public static readonly CultureInfo CI = CultureInfo.GetCultureInfo("hr-HR");
+        public const int MaxEffort = 100;
         public static class Hasher
         {
             public static readonly Hashids Ids = new(Env.SALT, 4, Env.ALPHABET);

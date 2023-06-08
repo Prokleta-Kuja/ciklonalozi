@@ -39,10 +39,19 @@
         <tbody>
             @foreach (var date in Orders)
             {
-                    <td colspan=10 class="p-1">
-                        <h6 class="mb-0 fs-6 text-capitalize"><i class="bi bi-calendar-event me-2"></i> @CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek) → @Display(date.Key, false)
+                var percentage = GetEffortPercentage(Efforts[date.Key]);
+                <td colspan=10 class="p-1">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="mb-0 fs-6 text-capitalize"><i class="bi bi-calendar-event me-2"></i>
+                            @CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek) → @Display(date.Key, false)
                         </h6>
-                    </td>
+                        <div class="progress" role="progressbar" style="height: 18px; width: 150px"
+                            title=@percentage.ToString("#0.00")%>
+                            <div class="progress-bar" style=@GetEffortStyle(percentage)></div>
+                        </div>
+                    </div>
+
+                </td>
                 @foreach (var order in date.Value)
                 {
                     <tr @key=order.OrderId class=@GetStatusRowClass(order) title=@GetStatusTitle(order)>
@@ -68,7 +77,7 @@
                         <td class="text-end">
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-primary" style="font-size:large;"
-                            @onclick=@(()=>EditClicked(order))>
+                                @onclick=@(()=>EditClicked(order))>
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
                                 <a class="btn btn-sm btn-success" style="font-size:large;" href="/print/@order.OrderId"

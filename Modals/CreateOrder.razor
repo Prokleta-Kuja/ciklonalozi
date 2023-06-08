@@ -13,26 +13,31 @@
                     </div>
                     <div class="modal-body">
                         <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=PhoneNumber
-                        Errors=Errors AutoFocus AutoComplete=off />
-                        <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
-                        Errors=Errors Required AutoComplete=off />
-                        <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
-                        Required AutoComplete=off />
-                        <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
-                        Errors=Errors AutoComplete=off />
-                        <NumBox For=@nameof(CreateOrderModel.EstimatedPrice) Label="Procjena iznosa radova" @bind-Value=Model.EstimatedPrice 
-                        Errors=Errors />
-                        <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label="Završiti do"
-                        @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
-                        <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival
-                        Errors=Errors />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="reset" class="btn btn-outline-danger" accesskey="c" @onclick=Hide>Odustani</button>
-                        <button type="submit" class="btn btn-primary" accesskey="s">Dodaj</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+                            Errors=Errors AutoFocus AutoComplete=off />
+                         <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
+                             Errors=Errors Required AutoComplete=off />
+                         <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
+                                        Required AutoComplete=off />
+                         <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
+                             Errors=Errors AutoComplete=off />
+                         <div class="d-flex">
+                             <IntegerBox For=@nameof(CreateOrderModel.Effort) Label="Trud" @bind-Value=Model.Effort
+                                 Errors=Errors Required />
+                             <div class="m-2"></div>
+                             <NumBox For=@nameof(CreateOrderModel.EstimatedPrice) Label="Procjena iznosa radova"
+                             @bind-Value=Model.EstimatedPrice Errors=Errors />
+                         </div>
+                         <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label="Završiti do"
+                         @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
+                         <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival
+                             Errors=Errors />
+                     </div>
+                     <div class="modal-footer">
+                         <button type="reset" class="btn btn-outline-danger" accesskey="c" @onclick=Hide>Odustani</button>
+                         <button type="submit" class="btn btn-primary" accesskey="s">Dodaj</button>
+                     </div>
+                 </div>
+             </form>
+         </div>
+     </div>
 }

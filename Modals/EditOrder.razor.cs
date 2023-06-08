@@ -35,6 +35,7 @@ namespace ciklonalozi.Modals
             Model.Completed = order.Completed;
             Model.Returned = order.Returned;
             Model.EstimatedPrice = order.EstimatedPrice;
+            Model.Effort = order.Effort;
             Model.RealPrice = order.RealPrice;
             Model.Removed = order.Removed;
 
@@ -81,6 +82,7 @@ namespace ciklonalozi.Modals
             OriginalOrder.Completed = Model.Completed;
             OriginalOrder.Returned = Model.Returned;
             OriginalOrder.EstimatedPrice = Model.EstimatedPrice;
+            OriginalOrder.Effort = Model.Effort!.Value;
             OriginalOrder.RealPrice = Model.RealPrice;
             OriginalOrder.Removed = Model.Removed;
 

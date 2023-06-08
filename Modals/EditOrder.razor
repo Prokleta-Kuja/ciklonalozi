@@ -13,7 +13,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-5">
                                 <TextBox For=@nameof(EditOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
                                 Errors=Errors Required />
                                 <TextBox For=@nameof(EditOrderModel.ContactPhone) Label=Telefon @bind-Value=Model.ContactPhone
@@ -31,7 +31,7 @@
                                     }
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-7">
                                 <DateTimeBox For=@nameof(EditOrderModel.Arrival) Label="Završiti do" @bind-Value=Model.Arrival
                                 Errors=Errors Required />
                                 <DateTimeBox For=@nameof(EditOrderModel.Arrived) Label=Zaprimljeno @bind-Value=Model.Arrived
@@ -39,6 +39,9 @@
                                 <DateTimeBox For=@nameof(EditOrderModel.Completed) Label=Završeno @bind-Value=Model.Completed
                                 Errors=Errors />
                                 <div class="d-flex">
+                                    <IntegerBox For=@nameof(CreateOrderModel.Effort) Label="Trud" @bind-Value=Model.Effort
+                                        Errors=Errors Required />
+                                    <div class="m-2"></div>
                                     <NumBox For=@nameof(EditOrderModel.EstimatedPrice) Label="Procjena iznosa" @bind-Value=Model.EstimatedPrice />
                                     <div class="m-2"></div>
                                     <NumBox For=@nameof(EditOrderModel.RealPrice) Label="Krajnja cijena" @bind-Value=Model.RealPrice

@@ -15,6 +15,7 @@ namespace ciklonalozi.Models
         public DateTime? Completed { get; set; }
         public DateTime? Returned { get; set; }
         public decimal? EstimatedPrice { get; set; }
+        public int? Effort { get; set; }
         public decimal? RealPrice { get; set; }
         public bool Removed { get; set; }
 
@@ -44,6 +45,9 @@ namespace ciklonalozi.Models
 
             if (Completed.HasValue && !RealPrice.HasValue)
                 errors.Add(nameof(RealPrice), "Obavezno za zatvoreni nalog");
+
+            if (!Effort.HasValue)
+                errors.Add(nameof(Effort), "Obavezno");
 
             if (errors.Any())
                 return errors;

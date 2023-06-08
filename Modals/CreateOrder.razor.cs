@@ -66,6 +66,7 @@ namespace ciklonalozi.Modals
 
             order.Description = Model.Description;
             order.EstimatedPrice = Model.EstimatedPrice;
+            order.Effort = Model.Effort!.Value;
 
             using var db = DbFactory.CreateDbContext();
             db.Orders.Add(order);
