@@ -12,8 +12,13 @@
                         <button type="button" class="btn-close" @onclick=Hide></button>
                     </div>
                     <div class="modal-body">
-                        <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=PhoneNumber
-                            Errors=Errors AutoFocus AutoComplete=off />
+                        <div class="d-flex">
+                            <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=PhoneNumber
+                                Errors=Errors AutoFocus AutoComplete=off PlaceHolder="Pretraži prethodne naloge" />
+                             <div class="m-2"></div>
+                             <TextBox For=@nameof(CreateOrderModel.ContactEmail) Label=Email @bind-Value=Model.ContactEmail
+                                 Errors=Errors AutoComplete=off />
+                         </div>
                          <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
                              Errors=Errors Required AutoComplete=off />
                          <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors

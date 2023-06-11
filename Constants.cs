@@ -10,9 +10,30 @@ namespace ciklonalozi
 {
     public static class C
     {
+        public const string CorsPolicy = nameof(CorsPolicy);
         public static readonly TimeZoneInfo TZ = TimeZoneInfo.FindSystemTimeZoneById("Europe/Zagreb");
         public static readonly CultureInfo CI = CultureInfo.GetCultureInfo("hr-HR");
         public const int MaxEffort = 100;
+        public static string Display(DateTime? dt, bool showTime = true, string empty = "-")
+        {
+            if (!dt.HasValue)
+                return empty;
+
+            var printDt = TimeZoneInfo.ConvertTimeFromUtc(dt.Value, C.TZ);
+            var format = C.CI.DateTimeFormat.ShortDatePattern;
+
+            if (showTime)
+                format += $" {C.CI.DateTimeFormat.ShortTimePattern}";
+
+            return printDt.ToString(format);
+        }
+        public static string Display(Decimal? num)
+        {
+            if (num.HasValue)
+                return num.Value.ToString("#,##0.00");
+            else
+                return "-";
+        }
         public static class Hasher
         {
             public static readonly Hashids Ids = new(Env.SALT, 4, Env.ALPHABET);
@@ -31,12 +52,12 @@ namespace ciklonalozi
         public static class Routes
         {
             public const string Root = "/";
-            public const string Invoices = "/invoices";
-            public const string Invoice = "/invoices/{Id:int}";
-            public static string InvoiceFor(int id) => $"{Invoices}/{id}";
-            public const string InvoicePrint = "/invoices/{Id:int}/print";
-            public static string InvoicePrintFor(int id) => $"{Invoices}/{id}/print";
+            public const string Requests = "/requests";
+            public const string Request = "/requests/{Id:int}";
+            public static string RequestFor(int id) => $"{Requests}/{id}";
             public const string Analysis = "/anal";
+            public const string ApiDates = "/api/dates";
+            public const string ApiRequest = "/api/request";
         }
         public static class Settings
         {

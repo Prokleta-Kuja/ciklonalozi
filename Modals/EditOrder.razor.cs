@@ -28,6 +28,7 @@ namespace ciklonalozi.Modals
 
             Model.ContactName = order.ContactName;
             Model.ContactPhone = order.ContactPhone;
+            Model.ContactEmail = order.ContactEmail;
             Model.Subject = order.Subject;
             Model.Description = order.Description;
             Model.Arrival = order.Arrival;
@@ -53,7 +54,7 @@ namespace ciklonalozi.Modals
         public void Hide()
         {
             Model = new();
-            Shown = false;
+            Shown = PushSend = false;
             StateHasChanged();
         }
         async Task SaveClicked()
@@ -75,6 +76,7 @@ namespace ciklonalozi.Modals
             {
                 OriginalOrder.ContactPhone = OriginalOrder.ContactPhoneNormalized = null;
             }
+            OriginalOrder.ContactEmail = Model.ContactEmail;
             OriginalOrder.Subject = Model.Subject!;
             OriginalOrder.Description = Model.Description;
             OriginalOrder.Arrival = Model.Arrival!.Value;

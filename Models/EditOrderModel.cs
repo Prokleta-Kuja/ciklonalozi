@@ -8,6 +8,7 @@ namespace ciklonalozi.Models
     {
         public string? ContactName { get; set; }
         public string? ContactPhone { get; set; }
+        public string? ContactEmail { get; set; }
         public string? Subject { get; set; }
         public string? Description { get; set; }
         public DateTime? Arrival { get; set; }

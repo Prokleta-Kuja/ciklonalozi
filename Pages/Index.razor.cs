@@ -14,8 +14,6 @@ namespace ciklonalozi.Pages
     public partial class Index
     {
         [Inject] public IDbContextFactory<AppDbContext> DbFactory { get; set; } = null!;
-        readonly CultureInfo CI = CultureInfo.GetCultureInfo("HR-hr");
-        readonly TimeZoneInfo TZ = TimeZoneInfo.FindSystemTimeZoneById("Europe/Zagreb");
         DateTime Today { get; } = DateTime.UtcNow.Date;
         DateTime Yesterday { get; } = DateTime.UtcNow.AddDays(-1).Date;
         Dictionary<DateTime, List<Order>> Orders { get; set; } = new();
@@ -97,26 +95,6 @@ namespace ciklonalozi.Pages
         }
         void AddClicked() => CreateOrderModal?.Show();
         async Task EditClicked(Order order) => await EditOrderModal!.Show(order);
-        string Display(DateTime? dt, bool showTime = true, string empty = "-")
-        {
-            if (!dt.HasValue)
-                return empty;
-
-            var printDt = TimeZoneInfo.ConvertTimeFromUtc(dt.Value, TZ);
-            var format = CI.DateTimeFormat.ShortDatePattern;
-
-            if (showTime)
-                format += $" {CI.DateTimeFormat.ShortTimePattern}";
-
-            return printDt.ToString(format);
-        }
-        string Display(Decimal? num)
-        {
-            if (num.HasValue)
-                return num.Value.ToString("#,##0.00");
-            else
-                return "-";
-        }
         string GetStatusRowClass(Order order)
         {
             if (order.Removed)

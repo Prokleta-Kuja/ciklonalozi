@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +31,7 @@ namespace ciklonalozi
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
+            services.AddControllers();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.ConfigureAuth(Configuration);
@@ -37,7 +39,14 @@ namespace ciklonalozi
             {
                 builder.UseSqlite(C.Settings.AppDbConnectionString);
                 builder.EnableSensitiveDataLogging(Debugger.IsAttached);
+                builder.LogTo(message => Debug.WriteLine(message), new[] { RelationalEventId.CommandExecuted });
             });
+            services.AddCors(options =>
+                options.AddPolicy(name: C.CorsPolicy, policy =>
+                    policy.WithOrigins("http://localhost:7347", "https://ciklo-sport.hr", "https://www.ciklo-sport.hr")
+                        .AllowAnyHeader()
+                )
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,11 +66,12 @@ namespace ciklonalozi
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuth();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers().RequireCors(C.CorsPolicy);
                 endpoints.MapRazorPages().RequireAuthorization(Auth.AuthorizedUsers);
                 endpoints.MapBlazorHub().RequireAuthorization(Auth.AuthorizedUsers);
                 endpoints.MapFallbackToPage("/_Host");

@@ -64,6 +64,7 @@ namespace ciklonalozi.Modals
             if (!Model.IsArrival)
                 order.Arrived = DateTime.UtcNow;
 
+            order.ContactEmail = Model.ContactEmail;
             order.Description = Model.Description;
             order.EstimatedPrice = Model.EstimatedPrice;
             order.Effort = Model.Effort!.Value;

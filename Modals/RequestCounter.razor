@@ -1,0 +1,66 @@
+@if (Shown)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show" style="display: block;" @onclick=Hide>
+        <div class="modal-dialog" @onclick:stopPropagation>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Narudžbe</h5>
+                    <button type="button" class="btn-close" @onclick=Hide></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Kontakt</th>
+                                    <th>Predmet</th>
+                                    <th>Zaprimljeno</th>
+                                    <th>Obrađeno</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Data)
+                                {
+                                    <tr>
+                                        <td>@item.Contact</td>
+                                        <td>@item.Subject</td>
+                                        <td>@C.Display(item.Created)</td>
+                                        <td class="text-center">
+                                            @if (item.OrderId == null)
+                                            {
+                                                <i class="bi bi-x-lg text-danger"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-check-lg text-success"></i>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-success fs-6" href="/requests/@item.RequestId"
+                                                target="_blank">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success" accesskey="r" @onclick=RefreshAsync>Osvježi</button>
+                    <button class="btn btn-danger" accesskey="c" @onclick=Hide>Zatvori</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="mb-3" @onclick=Show>
+    <label for=query class="form-label">Narudbže</label>
+    <input type="button" class="form-control btn @ButtonClasses()" accesskey="đ" value=@NewCount>
+</div>
+}

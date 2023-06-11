@@ -12,6 +12,7 @@
     <DateTimeBox For=@nameof(From) Label=Od @bind-Value=From AfterChange=Refresh />
     <DateTimeBox For=@nameof(To) Label=Do @bind-Value=To AfterChange=Refresh />
     <button type="submit" class="d-none"></button>
+    <RequestCounter />
 </form>
 
 <hr>
@@ -43,7 +44,7 @@
                 <td colspan=10 class="p-1">
                     <div class="d-flex justify-content-between">
                         <h6 class="mb-0 fs-6 text-capitalize"><i class="bi bi-calendar-event me-2"></i>
-                            @CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek) → @Display(date.Key, false)
+                            @C.CI.DateTimeFormat.GetDayName(date.Key.DayOfWeek) → @C.Display(date.Key, false)
                         </h6>
                         <div class="progress" role="progressbar" style="height: 18px; width: 150px"
                             title=@percentage.ToString("#0.00")%>
@@ -70,10 +71,10 @@
                         <td>@order.ContactName</td>
                         <td>@order.Subject</td>
                         <td>@order.Description</td>
-                        <td>@Display(order.Arrived)</td>
-                        <td>@Display(order.Completed)</td>
-                        <td>@Display(order.Returned)</td>
-                        <td class="text-end">@Display(order.RealPrice)</td>
+                        <td>@C.Display(order.Arrived)</td>
+                        <td>@C.Display(order.Completed)</td>
+                        <td>@C.Display(order.Returned)</td>
+                        <td class="text-end">@C.Display(order.RealPrice)</td>
                         <td class="text-end">
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-primary" style="font-size:large;"

@@ -12,6 +12,7 @@ namespace ciklonalozi.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<Request> Requests { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -20,6 +21,12 @@ namespace ciklonalozi.Data
             builder.Entity<Order>(e =>
             {
                 e.HasKey(p => p.OrderId);
+            });
+
+            builder.Entity<Request>(e =>
+            {
+                e.HasKey(p => p.RequestId);
+                e.HasOne(p => p.Order).WithOne(p => p.Request);
             });
 
             // SQLite conversions
@@ -58,7 +65,17 @@ namespace ciklonalozi.Data
                 Arrived = now.AddMinutes(5),
             });
 
-            // TODO: dodaj još
+            Requests.Add(new()
+            {
+                Contact = "Testo Testić",
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
+                Description = "Kurac, palac x3",
+                Email = "kme@te.st",
+                Note = "Molim poštovanje",
+                Phone = "Nemam",
+                Subject = "Motorna pila",
+                Created = DateTime.UtcNow,
+            });
 
             await SaveChangesAsync();
         }

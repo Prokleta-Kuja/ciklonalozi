@@ -1,0 +1,86 @@
+@attribute [Microsoft.AspNetCore.Components.RouteAttribute(C.Routes.Request)]
+@using ciklonalozi.Models
+
+@if (Loading)
+{
+    <h1>Učitavam</h1>
+}
+else if (Item == null)
+{
+    <h1>Obrisana narudžba. A možda je nikad nije ni bilo?</h1>
+}
+else
+{
+    <div class=container>
+<div class="row">
+    <div class="col">
+        <dl>
+            <dt>Predmet</dt>
+            <dd>@Item.Subject</dd>
+            <dt>Dan</dt>
+            <dd>@Item.Date</dd>
+            <dt>Kontakt</dt>
+            <dd>@Item.Contact</dd>
+            <dt>Telefon</dt>
+            <dd>@Item.Phone</dd>
+            <dt>Email</dt>
+            <dd>@Item.Email</dd>
+            <dt>Opis</dt>
+            <dd>@Item.Description</dd>
+            <dt>Predano</dt>
+            <dd>@C.Display(Item.Created)</dd>
+            <dt>Napomena</dt>
+            <dd>@Item.Note</dd>
+        </dl>
+        <button class="btn btn-danger" @onclick=Delete>Obriši</button>
+    </div>
+    <div class="col">
+        <h5>Email šprance</h5>
+        <div class="list-group">
+            <a href=@EmailAccepted class="list-group-item list-group-item-success">
+                @BodyAccepted
+            </a>
+            <a href=@EmailDeclined class="list-group-item list-group-item-danger">
+                @BodyDeclined
+            </a>
+        </div>
+    </div>
+    <div class="col">
+        @if(!Item.OrderId.HasValue)
+        {
+        <h5>Novi nalog</h5>
+         <form @onsubmit=SaveClicked>
+            <div class="d-flex">
+                <TextBox For=@nameof(CreateOrderModel.ContactPhone) Label=Telefon @bind-Value=Model.ContactPhone
+                    Errors=Errors AutoFocus AutoComplete=off PlaceHolder="Pretraži prethodne naloge" />
+                <div class="m-2"></div>
+                <TextBox For=@nameof(CreateOrderModel.ContactEmail) Label=Email @bind-Value=Model.ContactEmail
+                    Errors=Errors AutoComplete=off />
+            </div>
+            <TextBox For=@nameof(CreateOrderModel.ContactName) Label=Kontakt @bind-Value=Model.ContactName
+                Errors=Errors Required AutoComplete=off />
+            <TextBox For=@nameof(CreateOrderModel.Subject) Label=Predmet @bind-Value=Model.Subject Errors=Errors
+                        Required AutoComplete=off />
+            <TextBox For=@nameof(CreateOrderModel.Description) Label=Opis @bind-Value=Model.Description Lines=3
+                Errors=Errors AutoComplete=off />
+            <div class="d-flex">
+                <IntegerBox For=@nameof(CreateOrderModel.Effort) Label="Trud" @bind-Value=Model.Effort
+                    Errors=Errors Required />
+                <div class="m-2"></div>
+                <NumBox For=@nameof(CreateOrderModel.EstimatedPrice) Label="Procjena iznosa radova"
+                @bind-Value=Model.EstimatedPrice Errors=Errors />
+            </div>
+            <DateTimeBox For=@nameof(CreateOrderModel.ArrivalOrArrived) Label="Završiti do"
+            @bind-Value=Model.ArrivalOrArrived Errors=Errors Required />
+            <CheckBox For=@nameof(CreateOrderModel.IsArrival) Label="Najava" @bind-Value=Model.IsArrival
+                Errors=Errors />
+            <button type="submit" class="btn btn-primary" accesskey="s">Dodaj</button>
+        </form>
+        }
+        else{
+            <h5>Iz ove narudžbe stvoren je nalog broj @Item.OrderId.Value</h5>
+        }
+    </div>
+</div>
+</div>
+}

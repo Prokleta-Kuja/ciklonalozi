@@ -21,6 +21,7 @@ namespace ciklonalozi.Data
         public int OrderId { get; set; }
         public string ContactName { get; set; }
         public string? ContactPhone { get; set; }
+        public string? ContactEmail { get; set; }
         public string? ContactPhoneNormalized { get; set; }
         public string Subject { get; set; }
         public string? Description { get; set; }
@@ -32,6 +33,8 @@ namespace ciklonalozi.Data
         public decimal? RealPrice { get; set; }
         public int Effort { get; set; }
         public bool Removed { get; set; }
+
+        public Request? Request { get; set; }
 
         // push
         public bool CanPush => !string.IsNullOrWhiteSpace(Endpoint) && !string.IsNullOrWhiteSpace(P256DH) && !string.IsNullOrWhiteSpace(Auth);

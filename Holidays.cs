@@ -20,6 +20,12 @@ public static class Holidays
         Dates.Add(new(2023, 12, 25), "Žićbo");
         Dates.Add(new(2023, 12, 26), "Štefanje");
     }
+    public static bool IsHoliday(DateTime dt)
+    {
+        if (dt.Kind == DateTimeKind.Utc)
+            dt = TimeZoneInfo.ConvertTimeFromUtc(dt, C.TZ);
+        return Dates.ContainsKey(DateOnly.FromDateTime(dt));
+    }
     public static bool TryGetHoliday(DateTime dt, out string holiday)
     {
         if (dt.Kind == DateTimeKind.Utc)
