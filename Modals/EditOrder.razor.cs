@@ -17,6 +17,7 @@ namespace ciklonalozi.Modals
         [Parameter] public EventCallback OnSaved { get; set; }
         [Inject] public IDbContextFactory<AppDbContext> DbFactory { get; set; } = null!;
         bool Shown;
+        string LocalUrl = string.Empty;
         EditOrderModel Model = new();
         Order? OriginalOrder;
         bool PushSend;
@@ -25,7 +26,7 @@ namespace ciklonalozi.Modals
         private Dictionary<string, string>? Errors;
         public async Task Show(Order order)
         {
-
+            LocalUrl = $"{C.Env.URL.TrimEnd('/')}/nalog/{C.Hasher.Ids.Encode(order.OrderId)}";
             Model.ContactName = order.ContactName;
             Model.ContactPhone = order.ContactPhone;
             Model.ContactEmail = order.ContactEmail;
