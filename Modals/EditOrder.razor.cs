@@ -26,7 +26,7 @@ namespace ciklonalozi.Modals
         private Dictionary<string, string>? Errors;
         public async Task Show(Order order)
         {
-            LocalUrl = $"{C.Env.URL.TrimEnd('/')}/nalog/{C.Hasher.Ids.Encode(order.OrderId)}";
+            LocalUrl = $"https://ciklo-sport.hr/nalog/{C.Hasher.Ids.Encode(order.OrderId)}";
             Model.ContactName = order.ContactName;
             Model.ContactPhone = order.ContactPhone;
             Model.ContactEmail = order.ContactEmail;
