@@ -58,6 +58,7 @@ namespace ciklonalozi
             public const string Analysis = "/anal";
             public const string ApiDates = "/api/dates";
             public const string ApiRequest = "/api/request";
+            public const string ApiQr = "/api/qr/{orderHash}";
         }
         public static class Settings
         {

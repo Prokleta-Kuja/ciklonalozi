@@ -63,6 +63,40 @@ public class ExtController : ControllerBase
 
         return Ok();
     }
+    [HttpGet(C.Routes.ApiQr)]
+    public async Task<IActionResult> Qr(string orderHash)
+    {
+        var orderId = C.Hasher.Ids.DecodeSingle(orderHash.ToUpper());
+        var order = await _db.Orders.FindAsync(orderId);
+        if (order == null)
+            return NotFound();
+
+        var model = new QrModel(order);
+        return Ok(model);
+    }
+    [HttpPost(C.Routes.ApiQr)]
+    public async Task<IActionResult> Qr(string orderHash, QrUpdateModel model)
+    {
+        var orderId = C.Hasher.Ids.DecodeSingle(orderHash.ToUpper());
+        var order = await _db.Orders.FindAsync(orderId);
+        if (order == null)
+            return NotFound();
+
+        if (!string.IsNullOrWhiteSpace(model.E) && !string.IsNullOrWhiteSpace(model.P) && !string.IsNullOrWhiteSpace(model.A))
+        {
+            order.Endpoint = model.E;
+            order.P256DH = model.P;
+            order.Auth = model.A;
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.Email))
+            order.ContactEmail = model.Email;
+
+        await _db.SaveChangesAsync();
+
+        var vm = new QrModel(order);
+        return Ok(vm);
+    }
     static string GetText(DateTime dt)
         => $"{dt.ToString(CI.DateTimeFormat.ShortDatePattern)} - {CI.DateTimeFormat.GetDayName(dt.DayOfWeek)}";
 }
