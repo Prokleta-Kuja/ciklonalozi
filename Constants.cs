@@ -41,7 +41,7 @@ namespace ciklonalozi
             public static string GetQrUrl(int id)
             {
                 var hash = Ids.Encode(id);
-                var url = Debugger.IsAttached ? $"http://localhost:7347/nalog?qr={hash}" : $"https://ciklo-sport.hr/nalog?qr={hash}";
+                var url = Debugger.IsAttached ? $"http://localhost:7347/nalog/?qr={hash}" : $"https://ciklo-sport.hr/nalog/?qr={hash}";
                 return url;
             }
         }
