@@ -36,12 +36,6 @@ namespace ciklonalozi.Data
 
         public Request? Request { get; set; }
 
-        // push
-        public bool CanPush => !string.IsNullOrWhiteSpace(Endpoint) && !string.IsNullOrWhiteSpace(P256DH) && !string.IsNullOrWhiteSpace(Auth);
-        public string? Endpoint { get; set; }
-        public string? P256DH { get; set; }
-        public string? Auth { get; set; }
-
         // display
         public string IsReverse => OrderId % 2 == 0 ? "flex-row-reverse" : string.Empty;
         public string IsLeft => OrderId % 2 == 0 ? "text-left" : string.Empty;

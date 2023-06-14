@@ -14,7 +14,6 @@ namespace ciklonalozi
         public static async Task Main(string[] args)
         {
             await InitializeDb(args);
-            await C.Vapid.LoadAsync();
             CreateHostBuilder(args).Build().Run();
         }
 

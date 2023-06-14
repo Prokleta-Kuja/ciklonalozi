@@ -92,6 +92,7 @@ public partial class Requests
     string Signature =
     """
     Hvala što koristite Ciklo-Sport.
+    -- 
     www.ciklo-sport.hr
     """;
     string EmailAccepted => $"mailto:{Item?.Email}?subject={Uri.EscapeDataString("Narudžba prihvaćena")}&body={Uri.EscapeDataString(BodyAccepted)}";

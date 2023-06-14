@@ -47,24 +47,6 @@ namespace ciklonalozi.Pages
 
             using var db = _dbFactory.CreateDbContext();
             Order = await db.Orders.FindAsync(orderId);
-
-            if (Order != null)
-            {
-                if (string.IsNullOrWhiteSpace(e) || string.IsNullOrWhiteSpace(p) || string.IsNullOrWhiteSpace(a))
-                {
-                    Order.Endpoint = null;
-                    Order.P256DH = null;
-                    Order.Auth = null;
-                }
-                else
-                {
-                    Order.Endpoint = e;
-                    Order.P256DH = p;
-                    Order.Auth = a;
-                }
-
-                await db.SaveChangesAsync();
-            }
         }
     }
 }

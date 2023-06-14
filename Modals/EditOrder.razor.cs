@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -20,13 +21,11 @@ namespace ciklonalozi.Modals
         string LocalUrl = string.Empty;
         EditOrderModel Model = new();
         Order? OriginalOrder;
-        bool PushSend;
-        string? PushTitle;
-        string? PushBody;
+        bool ShowEmail;
         private Dictionary<string, string>? Errors;
         public async Task Show(Order order)
         {
-            LocalUrl = $"https://ciklo-sport.hr/nalog/{C.Hasher.Ids.Encode(order.OrderId)}";
+            LocalUrl = C.Hasher.GetQrUrl(order.OrderId);
             Model.ContactName = order.ContactName;
             Model.ContactPhone = order.ContactPhone;
             Model.ContactEmail = order.ContactEmail;
@@ -41,9 +40,6 @@ namespace ciklonalozi.Modals
             Model.RealPrice = order.RealPrice;
             Model.Removed = order.Removed;
 
-            PushTitle = "Servis završen";
-            PushBody = "Vaš bicikl je spreman za preuzimanje.";
-
             // Update original if changed in the meantime
             using var db = DbFactory.CreateDbContext();
             await db.Entry(order).ReloadAsync();
@@ -55,7 +51,7 @@ namespace ciklonalozi.Modals
         public void Hide()
         {
             Model = new();
-            Shown = PushSend = false;
+            Shown = false;
             StateHasChanged();
         }
         async Task SaveClicked()
@@ -91,34 +87,34 @@ namespace ciklonalozi.Modals
 
             Hide();
 
-            if (PushSend)
-            {
-                PushSend = false;
-                var webPushClient = new WebPushClient();
-                var url = C.Hasher.GetQrUrl(OriginalOrder.OrderId);
-                var notification = JsonSerializer.Serialize(new { title = PushTitle, message = PushBody, url });
-                try
-                {
-                    await webPushClient.SendNotificationAsync(
-                        new(OriginalOrder.Endpoint, OriginalOrder.P256DH, OriginalOrder.Auth),
-                        notification,
-                        C.Vapid.Current);
-                }
-                catch (WebPushException ex)
-                {
-                    if (ex.StatusCode == HttpStatusCode.Gone)
-                        OriginalOrder.Endpoint = OriginalOrder.P256DH = OriginalOrder.Auth = null;
-                }
-                catch (System.Exception ex)
-                {
-                    System.Console.WriteLine(ex.Message);
-                }
-            }
-
             await db.SaveChangesAsync();
 
             if (OnSaved.HasDelegate)
                 await OnSaved.InvokeAsync();
         }
+        string Signature =
+"""
+Hvala što koristite Ciklo-Sport.
+-- 
+www.ciklo-sport.hr
+""";
+        string EmailFinished => $"mailto:{Model?.ContactEmail}?subject={Uri.EscapeDataString("Servis završen")}&body={Uri.EscapeDataString(BodyFinished)}";
+        string BodyFinished =>
+$"""
+Poštovani,
+
+vaš predmet {Model.Subject} je spreman za preuzimanje.
+
+{Signature}
+""";
+        string EmailDeclined => $"mailto:{Model?.ContactEmail}?subject={Uri.EscapeDataString("Narudžba odbijena")}&body={Uri.EscapeDataString(BodyDeclined)}";
+        string BodyDeclined =>
+$"""
+Poštovani,
+
+Karlo je lijen i ovo neka mu stoji tu na sramotu.
+
+{Signature}
+""";
     }
 }

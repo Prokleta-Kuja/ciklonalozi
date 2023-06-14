@@ -22,8 +22,7 @@ public class QrModel
             EstimatedPrice = C.Display(order.EstimatedPrice);
         if (order.RealPrice.HasValue)
             RealPrice = C.Display(order.RealPrice);
-        CanPush = order.CanPush;
-        CanEmail = !string.IsNullOrWhiteSpace(order.ContactEmail);
+        Email = order.ContactEmail;
     }
     public int Id { get; set; }
     public string? Hash { get; set; }
@@ -36,6 +35,5 @@ public class QrModel
     public string? Description { get; set; }
     public string? EstimatedPrice { get; set; }
     public string? RealPrice { get; set; }
-    public bool CanPush { get; set; }
-    public bool CanEmail { get; set; }
+    public string? Email { get; set; }
 }

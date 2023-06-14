@@ -121,7 +121,7 @@
                 </div>
             </div>
             <div class="container-sm">
-                    <h1>Pozdrav @Model.Order.ContactName,</h1>
+                <h1>Pozdrav @Model.Order.ContactName,</h1>
 
                 <div class="ms-2 me-2">
                     <p>Predmet "@Model.Order.Subject" je dostavljen @Model.Order.Arrived sati te je u procesu servisiranja.</p>
@@ -168,41 +168,6 @@
                 </div>
             </div>
         }
-
-        <div class="container-sm">
-            @* Ovo se prikazuje ako korisnik ne želi primati obavijesti *@
-            <div id=denied class="d-none" role="alert">
-                <p>Slanje obavijesti je blokirano na Vašem uređaju. Ako se odlučite primati obavijesti, omogućite slanje obavijesti
-                   u svom pregledniku i probajte ponovo (ponovno učitajte stranicu).</p>
-            </div>
-    
-            @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti ali ne za ovaj nalog *@
-            <div id=granted class="d-none" role="alert">
-                <p>Obavijesti možete primati i za više naloga/predmeta.</p>
-                <button class="btn btn-info" onclick="subscribe()">Primajte obavijesti i za ovaj servis</button>
-            </div>
-    
-            @* Ovo se prikazuje ako je korisnik prihvatio primanje obavijesti za ovaj nalog *@
-            <div id=granted-subscribed class="d-none" role="alert">
-                <p>Primiti ćete obavijest kada radovi budu završeni.</p>
-                <button class="btn btn-success" onclick="unsubscribe()">Otkaži</button>
-            </div>
-    
-            @* Ovo se prikazuje ako možemo pitati da li želi primanje obavijesti *@
-            <div id=default class="d-none" role="alert">
-                <p>Primite obavijest o završetku radova na svoj uređaj.</p>
-                <div class="d-flex flex-row flex-wrap flex-lg-nowrap align-items-center justify-content-around">
-                    <button class="btn btn-info" onclick="subscribe()">Primite obavijest o završetku radova.</button>
-                    <p class="fs7 ms-3">*Ovo je beta verzija i ovisi o raznim faktorima koji određuju uspješnost ove funkcije. Postoji mogućnost da na Vašem uređaju ova opcija neće raditi stoga savjetujemo ručnu provjeru ponovnom posjetom na ovu stranicu u procijenjeno vrijeme završetka.</p>
-                </div>
-            </div>
-    
-            @* Ovo se prikazuje kada nešto ode u klinac. Bitno je da korisnik zna da neće dobiti obavijest *@
-            <div id=error class="d-none" role="alert">
-                <p>Nažalost Vas nismo mogli zabilježiti za primanje obavijesti. Probajte ponovo kasnije, a ako i dalje ne radi nas
-                informirajte kako bi mogli istražiti.</p>
-            </div>
-        </div>
 
         <hr class="m-0">
         <div class="m-1">
@@ -254,134 +219,7 @@
                 </div>
             </div>
         </div>
-        @* <p class="text-secondary text-center">Powered by: <img src="/images/ica-logo.svg" alt="ica-logo" style="height:16px; width:auto;"/><a href="https://ica.hr/">ica.hr</a></p> *@
     }
-
-
-    @* Ovo ne diraj *@
-    <form id=subform action="" method="post" class=d-none>
-        <input id=e name=e>
-        <input id=p name=p>
-        <input id=a name=a>
-        @Html.AntiForgeryToken()
-        <button type="submit"></button>
-    </form>
-
-    <script src="/js/bootstrap.min.js"></script>
-    <script>
-        var registration;
-        const loaded = @(Model.Order == null ? "false" : "true");
-        const subscribed = @Model.Order?.CanPush.ToString().ToLower();
-        (async () => {
-            if (!loaded) {
-                return;
-            }
-
-            if (!("Notification" in window)) {
-                return;
-            }
-
-            if (!('PushManager' in window)) {
-                return;
-            }
-
-            if (!('serviceWorker' in navigator)) {
-                return false;
-            }
-
-            registration = await navigator.serviceWorker.register("/js/push-handler.js");
-            registration.update();
-
-            if (!(registration.showNotification)) {
-                return;
-            }
-
-            if (Notification.permission == 'granted') {
-                if (subscribed)
-                    document.getElementById('granted-subscribed').className = "d-block alert alert-dark";
-                else
-                    document.getElementById('granted').className = "d-block alert alert-info";
-            }
-            else if (Notification.permission == 'denied') {
-                document.getElementById('denied').className = "d-block alert alert-warning";
-            }
-            else {
-                document.getElementById('default').className = "d-block alert alert-info";
-            }
-        })();
-
-        const saveSubscription = async (subscription) => {
-            if (subscription) {
-                let sub = getWebPushSubscriptionObject(subscription);
-
-                document.getElementById('e').value = sub.endpoint;
-                document.getElementById('p').value = sub.p256DH;
-                document.getElementById('a').value = sub.auth;
-
-                document.getElementById("subform").submit();
-            }
-            else {
-                subscribe();
-                document.getElementById('error').className = "d-block alert alert-danger";
-            }
-        }
-
-        const unsubscribe = async () => {
-            let subscription = await registration.pushManager.getSubscription();
-            if (subscription)
-                await subscription.unsubscribe();
-
-            document.getElementById("subform").submit();
-        }
-
-        const subscribe = async () => {
-            let permission = await Notification.requestPermission();
-
-            if (permission !== 'granted') {
-                window.location.href = window.location.href
-                return;
-            }
-
-            let subscription = await registration.pushManager.getSubscription();
-
-            if (subscription) {
-                saveSubscription(subscription);
-            }
-
-            var subscribeParams = { userVisibleOnly: true };
-            subscribeParams.applicationServerKey = urlB64ToUint8Array('@ciklonalozi.C.Vapid.Current.PublicKey');
-
-            subscription = await registration.pushManager.subscribe(subscribeParams);
-            saveSubscription(subscription);
-        }
-
-        const getWebPushSubscriptionObject = (subscription) => {
-            return {
-                endpoint: subscription.endpoint,
-                p256DH: base64Encode(subscription.getKey('p256dh')),
-                auth: base64Encode(subscription.getKey('auth'))
-            };
-        }
-
-        const urlB64ToUint8Array = (base64String) => {
-            var padding = '='.repeat((4 - base64String.length % 4) % 4);
-            var base64 = (base64String + padding)
-                .replace(/\-/g, '+')
-                .replace(/_/g, '/');
-
-            var rawData = window.atob(base64);
-            var outputArray = new Uint8Array(rawData.length);
-
-            for (var i = 0; i < rawData.length; ++i) {
-                outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-        }
-
-        const base64Encode = (arrayBuffer) => {
-            return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)));
-        }
-    </script>
 </body>
 
 </html>

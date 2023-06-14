@@ -16,7 +16,7 @@ namespace ciklonalozi.Controllers;
 [AllowAnonymous]
 public class ExtController : ControllerBase
 {
-    const int DAYS = 15;
+    const int DAYS = 14;
     static readonly CultureInfo CI = CultureInfo.GetCultureInfo("HR-hr");
     readonly ILogger<ExtController> _logger;
     readonly AppDbContext _db;
@@ -32,7 +32,7 @@ public class ExtController : ControllerBase
     [HttpPost(C.Routes.ApiDates)]
     public async Task<IActionResult> GetAvailableDates(DateRequestModel req)
     {
-        var from = DateTime.UtcNow.Date;
+        var from = DateTime.UtcNow.Date.AddDays(1);
         var to = from.AddDays(DAYS);
         var orders = await _db.Orders
             .Where(o => !o.Removed && o.Arrival > from && o.Arrival < to)
@@ -46,7 +46,7 @@ public class ExtController : ControllerBase
         // Obviously we can't use Sunday and holidays
         // In case customer wants more than fits in a day (max effort), we'll return days which are empty
         foreach (var day in availability)
-            if (day.Key.DayOfWeek != DayOfWeek.Sunday && !Holidays.IsHoliday(day.Key))
+            if (day.Key.DayOfWeek != DayOfWeek.Sunday && day.Key.DayOfWeek != DayOfWeek.Saturday && !Holidays.IsHoliday(day.Key))
                 if (day.Value > req.Effort || day.Value == C.MaxEffort)
                     results.Add(new() { Date = day.Key.ToString("yyyy-MM-dd"), Text = GetText(day.Key) });
 
@@ -75,22 +75,14 @@ public class ExtController : ControllerBase
         return Ok(model);
     }
     [HttpPost(C.Routes.ApiQr)]
-    public async Task<IActionResult> Qr(string orderHash, QrUpdateModel model)
+    public async Task<IActionResult> Qr(string orderHash, [FromForm] QrUpdateModel model)
     {
         var orderId = C.Hasher.Ids.DecodeSingle(orderHash.ToUpper());
         var order = await _db.Orders.FindAsync(orderId);
         if (order == null)
             return NotFound();
 
-        if (!string.IsNullOrWhiteSpace(model.E) && !string.IsNullOrWhiteSpace(model.P) && !string.IsNullOrWhiteSpace(model.A))
-        {
-            order.Endpoint = model.E;
-            order.P256DH = model.P;
-            order.Auth = model.A;
-        }
-
-        if (!string.IsNullOrWhiteSpace(model.Email))
-            order.ContactEmail = model.Email;
+        order.ContactEmail = model.Email.Trim();
 
         await _db.SaveChangesAsync();
 

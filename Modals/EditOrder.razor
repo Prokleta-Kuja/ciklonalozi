@@ -8,7 +8,7 @@
             <form @onsubmit=SaveClicked>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><a href=@LocalUrl>Nalog @OriginalOrder?.OrderId.ToString("#,0")</a></h5>
+                        <h5 class="modal-title"><a href=@LocalUrl target="_blank">Nalog @OriginalOrder?.OrderId.ToString("#,0")</a></h5>
                         <button type="button" class="btn-close" @onclick=Hide></button>
                     </div>
                     <div class="modal-body">
@@ -30,9 +30,9 @@
                                 <div class="d-flex justify-content-around">
                                     <CheckBox For=@nameof(EditOrderModel.Removed) Label=Brisano @bind-Value=Model.Removed
                                     Errors=Errors />
-                                    @if(OriginalOrder?.CanPush ?? false)
+                                    @if(!string.IsNullOrWhiteSpace(Model.ContactEmail))
                                     {
-                                        <CheckBox For=@nameof(PushSend) Label=Poruka @bind-Value=PushSend />
+                                        <CheckBox For=@nameof(ShowEmail) Label=Email @bind-Value=ShowEmail />
                                     }
                                 </div>
                             </div>
@@ -56,10 +56,16 @@
                                 Errors=Errors />
                             </div>
                         </div>
-                        @if(PushSend)
+                        @if(ShowEmail)
                         {
-                            <TextBox Label=Naslov @bind-Value=PushTitle />
-                            <TextBox Label=Sadržaj @bind-Value=PushBody Lines=2 />
+                            <div class="list-group">
+                                <a href=@EmailFinished target="_blank" class="list-group-item list-group-item-success">
+                                    @BodyFinished
+                                </a>
+                                <a href=@EmailDeclined target="_blank" class="list-group-item list-group-item-danger">
+                                    @BodyDeclined
+                                </a>
+                            </div>
                         }
                     </div>
                     <div class="modal-footer">
