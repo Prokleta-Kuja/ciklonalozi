@@ -38,9 +38,10 @@ public class ExtController : ControllerBase
             .Where(o => !o.Removed && o.Arrival > from && o.Arrival < to)
             .ToListAsync();
 
-        var availability = Enumerable.Range(0, DAYS - 1).ToDictionary(i => from.AddDays(i), _ => C.MaxEffort);
+        var availability = Enumerable.Range(0, DAYS).ToDictionary(i => from.AddDays(i), _ => C.MaxEffort);
         foreach (var order in orders)
-            availability[order.Arrival.Date] -= order.Effort;
+            if (availability.ContainsKey(order.Arrival.Date))
+                availability[order.Arrival.Date] -= order.Effort;
 
         var results = new List<DateResponseModel>();
         // Obviously we can't use Sunday and holidays
