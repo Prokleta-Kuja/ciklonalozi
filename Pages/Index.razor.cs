@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ciklonalozi.Data;
 using ciklonalozi.Modals;
@@ -40,30 +38,22 @@ namespace ciklonalozi.Pages
 
             if (!string.IsNullOrWhiteSpace(Query))
             {
-                var normalizedString = Query.ToUpperInvariant().Normalize(NormalizationForm.FormD);
-
-                var stringBuilder = new StringBuilder(normalizedString.Length);
-
-                foreach (var c in normalizedString)
-                {
-                    var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-                    if (unicodeCategory != UnicodeCategory.NonSpacingMark)
-                        stringBuilder.Append(c);
-                }
-
-                var likeStr = $"%{stringBuilder.ToString().Normalize(NormalizationForm.FormC)}%";
+                var normalized = C.Normalize(Query);
+                var likeStr = $"%{normalized}%";
 
                 query = query.Where(o =>
-                    EF.Functions.Like(o.ContactName, likeStr) ||
+                    EF.Functions.Like(o.ContactNameNormalized, likeStr) ||
                     EF.Functions.Like(o.ContactPhone!, likeStr) ||
-                    EF.Functions.Like(o.Description!, likeStr));
+                    EF.Functions.Like(o.DescriptionNormalized!, likeStr));
             }
+            else
+            {
+                if (From.HasValue)
+                    query = query.Where(o => o.Arrival > From.Value);
 
-            if (From.HasValue)
-                query = query.Where(o => o.Arrival > From.Value);
-
-            if (To.HasValue)
-                query = query.Where(o => o.Arrival < To.Value);
+                if (To.HasValue)
+                    query = query.Where(o => o.Arrival < To.Value);
+            }
 
             query = query.OrderBy(o => o.Arrival);
 

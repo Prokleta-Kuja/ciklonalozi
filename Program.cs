@@ -31,7 +31,7 @@ namespace ciklonalozi
             var opt = new DbContextOptionsBuilder<AppDbContext>();
             opt.UseSqlite(C.Settings.AppDbConnectionString);
 
-            var db = new AppDbContext(opt.Options);
+            using var db = new AppDbContext(opt.Options);
             if (db.Database.GetMigrations().Any())
                 await db.Database.MigrateAsync();
             else

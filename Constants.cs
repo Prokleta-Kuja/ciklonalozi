@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using HashidsNet;
@@ -34,6 +35,19 @@ namespace ciklonalozi
                 return num.Value.ToString("#,##0.00");
             else
                 return "-";
+        }
+        public static string Normalize(string str)
+        {//ĐURO???
+            var normalizedString = str.ToUpperInvariant().Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder(normalizedString.Length);
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                    stringBuilder.Append(c);
+            }
+            var normalized = stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+            return normalized;
         }
         public static class Hasher
         {

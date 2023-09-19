@@ -66,6 +66,8 @@ namespace ciklonalozi.Modals
 
             order.ContactEmail = Model.ContactEmail;
             order.Description = Model.Description;
+            if (!string.IsNullOrWhiteSpace(order.Description))
+                order.DescriptionNormalized = C.Normalize(order.Description);
             order.EstimatedPrice = Model.EstimatedPrice;
             order.Effort = Model.Effort!.Value;
 

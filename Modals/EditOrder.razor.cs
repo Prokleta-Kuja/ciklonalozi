@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 using ciklonalozi.Data;
 using ciklonalozi.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
-using WebPush;
 
 namespace ciklonalozi.Modals
 {
@@ -64,6 +61,7 @@ namespace ciklonalozi.Modals
             db.Attach(OriginalOrder);
 
             OriginalOrder.ContactName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.ContactName!);
+            OriginalOrder.ContactNameNormalized = C.Normalize(OriginalOrder.ContactName);
             if (!string.IsNullOrWhiteSpace(Model.ContactPhone))
             {
                 OriginalOrder.ContactPhone = Model.ContactPhone;
@@ -76,6 +74,8 @@ namespace ciklonalozi.Modals
             OriginalOrder.ContactEmail = Model.ContactEmail;
             OriginalOrder.Subject = Model.Subject!;
             OriginalOrder.Description = Model.Description;
+            if (!string.IsNullOrWhiteSpace(OriginalOrder.Description))
+                OriginalOrder.DescriptionNormalized = C.Normalize(OriginalOrder.Description);
             OriginalOrder.Arrival = Model.Arrival!.Value;
             OriginalOrder.Arrived = Model.Arrived;
             OriginalOrder.Completed = Model.Completed;
