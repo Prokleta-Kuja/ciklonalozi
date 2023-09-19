@@ -6,8 +6,12 @@
 
 <form class="d-flex justify-content-evenly" @onsubmit=Refresh @onsubmit:preventDefault>
     <div class="mb-3">
+        <label for=order-no class="form-label">Broj naloga</label>
+        <input @ref=QueryElement class="form-control" id=order-no @bind=OrderNo>
+    </div>
+    <div class="mb-3">
         <label for=query class="form-label">Traži</label>
-        <input @ref=QueryElement class="form-control" id=query @bind=Query>
+        <input class="form-control" id=query @bind=Query>
     </div>
     <DateTimeBox For=@nameof(From) Label=Od @bind-Value=From AfterChange=Refresh />
     <DateTimeBox For=@nameof(To) Label=Do @bind-Value=To AfterChange=Refresh />
@@ -92,4 +96,11 @@
             }
         </tbody>
     </table>
+    @if (_resultCount == MAX)
+    {
+        <div class="alert alert-warning" role="alert">
+            Prikazuje se samo prvih @MAX naloga. Definiraj preciznije uvjete ako nisi našao nalog koji tražiš! Zašto? Zato
+            što preglednik umire prilikom prikaza tone naloga.
+        </div>
+    }
 </div>

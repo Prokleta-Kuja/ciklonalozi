@@ -11,11 +11,14 @@ namespace ciklonalozi.Pages
 {
     public partial class Index
     {
+        const int MAX = 100;
+        int _resultCount = 0;
         [Inject] public IDbContextFactory<AppDbContext> DbFactory { get; set; } = null!;
         DateTime Today { get; } = DateTime.UtcNow.Date;
         DateTime Yesterday { get; } = DateTime.UtcNow.AddDays(-1).Date;
         Dictionary<DateTime, List<Order>> Orders { get; set; } = new();
         Dictionary<DateTime, int> Efforts { get; set; } = new();
+        protected int? OrderNo;
         protected string? Query;
         protected ElementReference QueryElement;
         protected DateTime? From = DateTime.UtcNow.Date.AddDays(-1);
@@ -36,15 +39,27 @@ namespace ciklonalozi.Pages
             using var db = DbFactory.CreateDbContext();
             var query = db.Orders.AsNoTracking();
 
+            if (OrderNo.HasValue && OrderNo.Value > 0)
+            {
+                var order = await query.SingleOrDefaultAsync(o => o.OrderId == OrderNo.Value);
+                OrderNo = null;
+                if (order != null)
+                    await EditOrderModal!.Show(order);
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(Query))
             {
                 var normalized = C.Normalize(Query);
-                var likeStr = $"%{normalized}%";
-
-                query = query.Where(o =>
-                    EF.Functions.Like(o.ContactNameNormalized, likeStr) ||
-                    EF.Functions.Like(o.ContactPhone!, likeStr) ||
-                    EF.Functions.Like(o.DescriptionNormalized!, likeStr));
+                var words = normalized.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                foreach (var word in words)
+                {
+                    var likeStr = $"%{word}%";
+                    query = query.Where(o =>
+                        EF.Functions.Like(o.ContactNameNormalized, likeStr) ||
+                        EF.Functions.Like(o.ContactPhone!, likeStr) ||
+                        EF.Functions.Like(o.DescriptionNormalized!, likeStr));
+                }
             }
             else
             {
@@ -57,7 +72,8 @@ namespace ciklonalozi.Pages
 
             query = query.OrderBy(o => o.Arrival);
 
-            var results = await query.ToListAsync();
+            var results = await query.Take(MAX).ToListAsync();
+            _resultCount = results.Count;
 
             Orders.Clear();
             Efforts.Clear();
