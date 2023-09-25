@@ -34,6 +34,7 @@ namespace ciklonalozi.Data
         public DateTime? Returned { get; set; }
         public decimal? EstimatedPrice { get; set; }
         public decimal? RealPrice { get; set; }
+        public string? OfferNumber { get; set; }
         public int Effort { get; set; }
         public bool Removed { get; set; }
 

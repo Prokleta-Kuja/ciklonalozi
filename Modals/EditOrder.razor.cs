@@ -35,6 +35,7 @@ namespace ciklonalozi.Modals
             Model.EstimatedPrice = order.EstimatedPrice;
             Model.Effort = order.Effort;
             Model.RealPrice = order.RealPrice;
+            Model.OfferNumber = order.OfferNumber;
             Model.Removed = order.Removed;
 
             // Update original if changed in the meantime
@@ -83,6 +84,7 @@ namespace ciklonalozi.Modals
             OriginalOrder.EstimatedPrice = Model.EstimatedPrice;
             OriginalOrder.Effort = Model.Effort!.Value;
             OriginalOrder.RealPrice = Model.RealPrice;
+            OriginalOrder.OfferNumber = Model.OfferNumber;
             OriginalOrder.Removed = Model.Removed;
 
             Hide();

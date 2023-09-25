@@ -49,8 +49,13 @@
                                     <div class="m-2"></div>
                                     <NumBox For=@nameof(EditOrderModel.EstimatedPrice) Label="Procjena iznosa" @bind-Value=Model.EstimatedPrice />
                                     <div class="m-2"></div>
+                                </div>
+                                <div class="d-flex">
+                                    <TextBox For=@nameof(EditOrderModel.OfferNumber) Label="Broj ponude" @bind-Value=Model.OfferNumber />
+                                    <div class="m-2"></div>
                                     <NumBox For=@nameof(EditOrderModel.RealPrice) Label="Krajnja cijena" @bind-Value=Model.RealPrice
                                     Required=Model.Completed.HasValue AutoFocus />
+                                    <div class="m-2"></div>
                                 </div>
                                 <DateTimeBox For=@nameof(EditOrderModel.Returned) Label=Vraćeno @bind-Value=Model.Returned
                                 Errors=Errors />

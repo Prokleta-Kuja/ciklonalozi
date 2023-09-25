@@ -18,6 +18,7 @@ namespace ciklonalozi.Models
         public decimal? EstimatedPrice { get; set; }
         public int? Effort { get; set; }
         public decimal? RealPrice { get; set; }
+        public string? OfferNumber { get; set; }
         public bool Removed { get; set; }
 
         public Dictionary<string, string>? Validate()
