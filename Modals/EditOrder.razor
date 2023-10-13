@@ -8,7 +8,7 @@
             <form @onsubmit=SaveClicked>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><a href=@LocalUrl target="_blank">Nalog @OriginalOrder?.OrderId.ToString("#,0")</a></h5>
+                        <h5 class="modal-title"><a href=@LocalUrl target="_blank">Nalog @C.Display(OriginalOrder?.OrderId)</a></h5>
                         <button type="button" class="btn-close" @onclick=Hide></button>
                     </div>
                     <div class="modal-body">

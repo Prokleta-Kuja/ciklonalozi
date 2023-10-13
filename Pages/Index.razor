@@ -71,7 +71,7 @@
                                 <i class=@GetStatusIconClass(order)></i>
                             }
                         </td>
-                        <td class="text-end">@order.OrderId.ToString("#,0")</td>
+                        <td class="text-end">@C.Display(order.OrderId)</td>
                         <td>@order.ContactName</td>
                         <td>@order.Subject</td>
                         <td>@order.Description</td>

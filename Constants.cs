@@ -3,10 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using HashidsNet;
-using WebPush;
 
 namespace ciklonalozi
 {
@@ -21,18 +18,25 @@ namespace ciklonalozi
             if (!dt.HasValue)
                 return empty;
 
-            var printDt = TimeZoneInfo.ConvertTimeFromUtc(dt.Value, C.TZ);
-            var format = C.CI.DateTimeFormat.ShortDatePattern;
+            var printDt = TimeZoneInfo.ConvertTimeFromUtc(dt.Value, TZ);
+            var format = CI.DateTimeFormat.ShortDatePattern;
 
             if (showTime)
-                format += $" {C.CI.DateTimeFormat.ShortTimePattern}";
+                format += $" {CI.DateTimeFormat.ShortTimePattern}";
 
             return printDt.ToString(format);
         }
-        public static string Display(Decimal? num)
+        public static string Display(decimal? num)
         {
             if (num.HasValue)
-                return num.Value.ToString("#,##0.00");
+                return num.Value.ToString("#,##0.00", CI);
+            else
+                return "-";
+        }
+        public static string Display(int? num)
+        {
+            if (num.HasValue)
+                return num.Value.ToString("#,##0", CI);
             else
                 return "-";
         }
