@@ -43,8 +43,8 @@ public static class Holidays
         Dates.Add(new(2026, 4, 5), "Uskrs");
         Dates.Add(new(2026, 4, 6), "Uskršnji ponedjeljak");
         Dates.Add(new(2026, 5, 1), "Dan neradnika"); 
-        Dates.Add(new(2025, 5, 30), "Dan državnosti");
-        Dates.Add(new(2025, 6, 4), "Tijelovo");
+        Dates.Add(new(2026, 5, 30), "Dan državnosti");
+        Dates.Add(new(2026, 6, 4), "Tijelovo");
         Dates.Add(new(2026, 6, 22), "Dan antifašističke borbe");
         Dates.Add(new(2026, 8, 5), "Dan pobjede");
         Dates.Add(new(2026, 8, 15), "Velika Gospa");
